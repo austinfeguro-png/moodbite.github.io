@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MoodBite — Eat what you need</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#2f312e",
+                        "outline": "#77786f",
+                        "surface-container-high": "#e8e8e3",
+                        "surface-dim": "#dadad5",
+                        "primary": "#535845",
+                        "surface-container-low": "#f4f4ef",
+                        "on-secondary-fixed": "#161e07",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c7c7bd",
+                        "tertiary-container": "#b25203",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e3e3de",
+                        "inverse-on-surface": "#f1f1ec",
+                        "on-tertiary-fixed-variant": "#763300",
+                        "on-primary-container": "#eff4db",
+                        "error": "#ba1a1a",
+                        "on-background": "#1a1c19",
+                        "on-tertiary-fixed": "#331200",
+                        "background": "#fafaf5",
+                        "on-surface-variant": "#464740",
+                        "tertiary-fixed-dim": "#ffb68d",
+                        "on-primary-fixed": "#191d0e",
+                        "on-primary-fixed-variant": "#444937",
+                        "on-secondary-fixed-variant": "#414a2e",
+                        "surface-container": "#eeeee9",
+                        "inverse-primary": "#c4c9b1",
+                        "surface": "#fafaf5",
+                        "primary-fixed": "#e0e5cc",
+                        "tertiary-fixed": "#ffdbc9",
+                        "secondary-fixed": "#dde7c1",
+                        "secondary": "#596244",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#5c614d",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e3e3de",
+                        "surface-bright": "#fafaf5",
+                        "on-surface": "#1a1c19",
+                        "on-tertiary-container": "#ffeee7",
+                        "primary-container": "#6b705c",
+                        "secondary-fixed-dim": "#c1cba6",
+                        "on-secondary-container": "#5d6648",
+                        "primary-fixed-dim": "#c4c9b1",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "tertiary": "#8d3f00",
+                        "secondary-container": "#dae4be"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .organic-blob {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+
+        .glass-nav {
+            background: rgba(250, 250, 245, 0.7);
+            backdrop-filter: blur(20px);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+       @keyframes scroll {
+    0% { transform: translateX(0%); }
+    20% { transform: translateX(0%); }
+
+    25% { transform: translateX(-25%); }
+    45% { transform: translateX(-25%); }
+
+    50% { transform: translateX(-50%); }
+    70% { transform: translateX(-50%); }
+
+    75% { transform: translateX(-75%); }
+    95% { transform: translateX(-75%); }
+
+    100% { transform: translateX(0%); }
+}
+
+        .animate-app-carousel {
+            display: flex;
+            animation: scroll 12s infinite ease-in-out;
+        }
+        #reco-slider {
+    scroll-behavior: smooth;
+    cursor: grab;
+}
+
+#reco-slider:active {
+    cursor: grabbing;
+}
+
+/* Premium card hover effect */
+#reco-slider > div {
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+#reco-slider > div:hover {
+    transform: translateY(-8px) scale(1.03);
+    z-index: 5;
+}
+
+/* fade edges (premium feel) */
+#reco-slider::before,
+#reco-slider::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+#reco-slider::before {
+    left: 0;
+    background: linear-gradient(to right, #fafaf5, transparent);
+}
+
+#reco-slider::after {
+    right: 0;
+    background: linear-gradient(to left, #fafaf5, transparent);
+}
+#reco-slider {
+    overflow-x: auto;
+    overflow-y: visible; /* IMPORTANT */
+    scroll-snap-type: x mandatory;
+}
+
+#reco-slider > div {
+    position: relative;
+    z-index: 1;
+    transform-origin: center;
+}
+
+#reco-slider > div:hover {
+    z-index: 20; /* ensures hovered card stays above others */
+}
+.nav-link {
+    position: relative;
+    padding-bottom: 6px;
+}
+
+/* underline (hidden by default) */
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    opacity: 0;
+}
+
+/* active state */
+.active-nav {
+    color: #1a1c19;
+}
+
+.dark .active-nav {
+    color: #ffffff;
+}
+
+/* show underline ONLY when active */
+.active-nav::after {
+    transform: scaleX(1);
+    opacity: 1;
+}
+.active-nav::after {
+    height: 3px;
+}
+    </style>
+</head>
+
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+    <!-- Top Navigation -->
+    <nav class="sticky top-0 w-full z-50 bg-stone-50/70 dark:bg-stone-900/70 backdrop-blur-xl">
+        <div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+            <div class="text-xl font-bold text-stone-800 dark:text-stone-100 tracking-tight">MoodBite</div>
+            <div class="hidden md:flex gap-8 items-center">
+                <a class="nav-link text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 transition-all font-['Plus_Jakarta_Sans'] font-medium text-sm tracking-wide"
+                    href="#hero">Home</a>
+                
+                <a class="nav-link text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 transition-all font-['Plus_Jakarta_Sans'] font-medium text-sm tracking-wide"
+                    href="#moods">Moods</a>
+                
+                <a class="nav-link text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 transition-all font-['Plus_Jakarta_Sans'] font-medium text-sm tracking-wide"
+                    href="#recommendations">Recommendations</a>
+                
+                <a class="nav-link text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 transition-all font-['Plus_Jakarta_Sans'] font-medium text-sm tracking-wide"
+                    href="#tracking">Tracking</a>
+                
+                <a class="nav-link text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 transition-all font-['Plus_Jakarta_Sans'] font-medium text-sm tracking-wide"
+                    href="#wellness">Wellness</a>
+                
+                <a class="nav-link text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 transition-all font-['Plus_Jakarta_Sans'] font-medium text-sm tracking-wide"
+                    href="#team">Team</a>
+            </div>
+            <button
+                class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-medium text-sm hover:scale-95 transition-all duration-200 ease-in-out">Get
+                App</button>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden pt-12 pb-24 md:pt-24 md:pb-32 px-8" id="hero">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-secondary-container/30 organic-blob -z-10"></div>
+        <div class="absolute top-1/2 -left-12 w-64 h-64 bg-primary-fixed/20 organic-blob -z-10"></div>
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8">
+                <h1 class="text-[3.5rem] leading-[1.1] font-semibold text-on-surface tracking-tight">
+                    Eat what <br /><span class="text-primary italic">you need.</span>
+                </h1>
+                <p class="text-lg text-on-surface-variant leading-relaxed max-w-md">
+                    MoodBite listens to your emotions and body signals to suggest the perfect meal. Because what you eat
+                    defines how you feel.
+                </p>
+                <div class="flex gap-4">
+                    <button
+                        class="bg-primary text-on-primary px-10 py-4 rounded-full font-semibold shadow-lg shadow-primary/10 hover:translate-y-[-2px] transition-all">Get
+                        Started</button>
+                    <button class="text-primary font-semibold px-8 py-4 flex items-center gap-2 group">
+                        Watch how it works
+                        <span
+                            class="material-symbols-outlined group-hover:translate-x-1 transition-transform">play_circle</span>
+                    </button>
+                </div>
+            </div>
+            <div class="relative flex justify-center">
+                <div class="w-72 h-[580px] bg-on-background rounded-[3rem] p-3 shadow-2xl relative overflow-hidden">
+                    <div class="w-full h-full bg-surface overflow-hidden rounded-[2.5rem] relative">
+                        <!-- Automated App Screens Carousel -->
+                        <div class="animate-app-carousel h-full w-[400%]">
+                            <!-- Screen 1: Recommendations -->
+                            <div class="w-1/4 h-full relative">
+                                <img class="w-full h-full object-cover opacity-90"
+                                    data-alt="close-up of fresh vibrant salad bowl"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz4eAZUEbQ6N6ldJ89zmrdFHimVjIllV0pQfduxczCwASGW2vxe8t-x-ydfn0N_uq9cPT3jDqiErYNO5aEC2vG5yYdWHfho8Zo0DtVYvFB4M2Q0NIaN0NNLr2CzTMlfBkDl6G_w6XNzBno_QV93G7l_hgPUuWgDMlZneaVSxPZBwqFlCQMsJfigX1Nft28Q5xCcWZZ4tHP4s_2zGTJ_wHUqwSKlZLu0YgXZUw6Iu9zOI7l38qjZwWCaKwyb1qNwb_QzM6zJOxoRN60" />
+                                <div class="absolute bottom-8 left-0 right-0 px-6 text-center">
+                                    <div class="bg-surface-container-lowest/90 backdrop-blur p-4 rounded-lg shadow-sm">
+                                        <p class="text-xs font-bold text-primary uppercase tracking-widest mb-1">
+                                            Recommendation</p>
+                                        <p class="text-sm font-semibold">Fresh Mediterranean Bowl</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Screen 2: Mood Selection -->
+                            <div
+                                class="w-1/4 h-full bg-surface-container-low p-8 flex flex-col items-center justify-center gap-6">
+                                <h4 class="text-xl font-bold text-center">How are you feeling?</h4>
+                                <div class="grid grid-cols-2 gap-3 w-full">
+                                    <div class="bg-white p-4 rounded-xl text-center shadow-sm">😊</div>
+                                    <div class="bg-white p-4 rounded-xl text-center shadow-sm">😴</div>
+                                    <div class="bg-white p-4 rounded-xl text-center shadow-sm">😣</div>
+                                    <div class="bg-white p-4 rounded-xl text-center shadow-sm">😠</div>
+                                </div>
+                            </div>
+                            <!-- Screen 3: Tracking -->
+                            <div class="w-1/4 h-full bg-surface p-6 flex flex-col">
+                                <h4 class="text-lg font-bold mb-4">On the way</h4>
+                                <div class="flex-1 bg-stone-100 rounded-xl relative overflow-hidden">
+                                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                        <span
+                                            class="material-symbols-outlined text-primary text-4xl">electric_scooter</span>
+                                    </div>
+                                </div>
+                                <div class="mt-4 p-4 bg-primary text-on-primary rounded-xl">
+                                    <p class="text-xs opacity-80">Arrival in</p>
+                                    <p class="text-xl font-bold">12 mins</p>
+                                </div>
+                            </div>
+                            <!-- Screen 4: Wellness -->
+                            <div class="w-1/4 h-full bg-surface p-6 flex flex-col gap-6 justify-center">
+                                <div class="p-4 bg-secondary-container rounded-2xl">
+                                    <p class="text-[10px] uppercase font-bold text-on-secondary-container">Mood Score
+                                    </p>
+                                    <p class="text-3xl font-bold text-on-secondary-container">8.4</p>
+                                </div>
+                                <div class="p-4 bg-surface-container rounded-2xl">
+                                    <p class="text-[10px] uppercase font-bold text-on-surface-variant">Daily Steps</p>
+                                    <p class="text-3xl font-bold">6,842</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Floating Elements -->
+                <div
+                    class="absolute -right-8 top-12 bg-surface-container-lowest p-4 rounded-lg shadow-xl shadow-on-surface/5 animate-bounce-slow">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">😊</span>
+                        <div>
+                            <p class="text-xs text-on-surface-variant">Current Mood</p>
+                            <p class="text-sm font-bold">Radiant</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Mood Selection Section -->
+    <section class="py-24 bg-surface-container-low" id="moods">
+        <div class="max-w-7xl mx-auto px-8 text-center">
+            <h2 class="text-[1.75rem] font-medium mb-12">How are you feeling right now?</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-4xl mx-auto mb-12">
+                <!-- Happy -->
+                <button
+                    class="group bg-surface-container-lowest p-8 rounded-lg transition-all hover:bg-secondary-container hover:translate-y-[-4px]">
+                    <span class="text-4xl block mb-4 group-hover:scale-110 transition-transform">😊</span>
+                    <span
+                        class="font-semibold text-on-surface-variant group-hover:text-on-secondary-container">Happy</span>
+                </button>
+                <!-- Sad -->
+                <button
+                    class="group bg-surface-container-lowest p-8 rounded-lg transition-all hover:bg-surface-container-high hover:translate-y-[-4px]">
+                    <span class="text-4xl block mb-4 group-hover:scale-110 transition-transform">😢</span>
+                    <span class="font-semibold text-on-surface-variant">Sad</span>
+                </button>
+                <!-- Stressed -->
+                <button
+                    class="group bg-surface-container-lowest p-8 rounded-lg transition-all hover:bg-surface-container-high hover:translate-y-[-4px]">
+                    <span class="text-4xl block mb-4 group-hover:scale-110 transition-transform">😣</span>
+                    <span class="font-semibold text-on-surface-variant">Stressed</span>
+                </button>
+                <!-- Tired -->
+                <button
+                    class="group bg-surface-container-lowest p-8 rounded-lg transition-all hover:bg-surface-container-high hover:translate-y-[-4px]">
+                    <span class="text-4xl block mb-4 group-hover:scale-110 transition-transform">😴</span>
+                    <span class="font-semibold text-on-surface-variant">Tired</span>
+                </button>
+                <!-- Angry -->
+                <button
+                    class="group bg-surface-container-lowest p-8 rounded-lg transition-all hover:bg-surface-container-high hover:translate-y-[-4px]">
+                    <span class="text-4xl block mb-4 group-hover:scale-110 transition-transform">😠</span>
+                    <span class="font-semibold text-on-surface-variant">Angry</span>
+                </button>
+            </div>
+            <button class="bg-primary text-on-primary px-12 py-4 rounded-full font-semibold">Continue</button>
+        </div>
+    </section>
+    <!-- Smart Recommendations Section -->
+    <section class="py-24 overflow-hidden" id="recommendations">
+        <div class="max-w-7xl mx-auto px-8 mb-12 flex justify-between items-end">
+            <div>
+                <h2 class="text-[1.75rem] font-medium mb-2">Tailored for your Mood</h2>
+                <p class="text-on-surface-variant">Based on your "Stressed" state, we suggest these calming meals.</p>
+            </div>
+            <div class="flex gap-4">
+            <button class="p-3 rounded-full border border-outline-variant/30 hover:bg-surface-container transition-colors"
+                onclick="scrollToPage(activePage - 1)">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            
+            <button class="p-3 rounded-full border border-outline-variant/30 hover:bg-surface-container transition-colors"
+                onclick="scrollToPage(activePage + 1)">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+            </div>
+        </div>
+    <div class="relative px-8">
+        <!-- Scroll Container -->
+        <div id="reco-slider" class="flex gap-8 overflow-x-auto scroll-smooth no-scrollbar snap-x snap-mandatory px-4 py-2">
+    
+            <!-- Card 1 -->
+            <div class="min-w-[320px] md:min-w-[380px] group snap-start">
+                <div class="relative h-64 md:h-80 rounded-lg overflow-hidden mb-4">
+                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        data-alt="gourmet salmon bowl"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9BHKWJ9FfpOIhJ5r-AxBoqFX6pnrUwGBv0XI1RA_a27XwubX1zfdcw04MN1mAKWSSNC-UORmUeZVAhZ1wd48AWi-UetRqiMl00rlUvC13f3ITlSk3nQ9bVijVye4_tQ6hI8AJzji9uhH1ua2Hu_MBVbe-o6DNEfN6xGcbLkURNZ4_4o4Gy9MT__AvwCFOoJp_0XfcyrNUHTflkXfXZzBZE6xAInQs0XqiiN6Wi9Q2iaJCtJmFYh7wjDimGnw3Bf0yIiIL_BuZakgG" />
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                        <button class="bg-surface-container-lowest text-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">menu_book</span></button>
+                        <button class="bg-primary text-on-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">shopping_cart</span></button>
+                    </div>
+                </div>
+                <h3 class="text-lg font-semibold">Miso Glazed Salmon</h3>
+                <p class="text-sm text-on-surface-variant mb-3">450 kcal • High Omega-3</p>
+                <div class="flex gap-2">
+                    <span
+                        class="bg-secondary-container text-on-secondary-container text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">Calming</span>
+                    <span
+                        class="bg-surface-container-high text-on-surface-variant text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">Healthy</span>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="min-w-[320px] md:min-w-[380px] group snap-start">
+                <div class="relative h-64 md:h-80 rounded-lg overflow-hidden mb-4">
+                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        data-alt="warm autumn salad"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbghC_LLIYSSlQ3sFMDEVqUcqCS14n7VGdBeJJ1vZO36bbMD1VKn4OQEDRIWKuM8UhNhaKW4TldHK5gx_z5xuPvKjQN7_vxQeHZ7Ql8aoi4m4plwRO5XeLFouKCU1HwvEu31vga7BskqJLeD6u0cLLQ_GQg9CVzGTLCFAWGYasMaMgU1CX1OcMcOeaK6Cyk_HedzNbd-gQCCcW8MLN3wbl_vqVXVg8DPBy_MgJjiPbckrrC3b-pxutZREmcfhvoVNkSUleEAx8ypTM" />
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                        <button class="bg-surface-container-lowest text-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">menu_book</span></button>
+                        <button class="bg-primary text-on-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">shopping_cart</span></button>
+                    </div>
+                </div>
+                <h3 class="text-lg font-semibold">Roasted Squash Salad</h3>
+                <p class="text-sm text-on-surface-variant mb-3">320 kcal • High Fiber</p>
+                <div class="flex gap-2">
+                    <span
+                        class="bg-secondary-container text-on-secondary-container text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">Grounding</span>
+                    <span
+                        class="bg-surface-container-high text-on-surface-variant text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">Vegan</span>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="min-w-[320px] md:min-w-[380px] group snap-start">
+                <div class="relative h-64 md:h-80 rounded-lg overflow-hidden mb-4">
+                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        data-alt="steaming bowl of vegetable pho"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDIV1MP-8GUdo_TqvkdLUJGeGj-V41gGAo70geD0RJuWUDpBTLwlNaYApfPyoBFGP5IkcOwiqO9UFyY1BIjY0iDfasW8sFBqXD7akHIEE8F4gsjM4uqbCmx5NEG6FUZyC1ZIhMUMvW-8r-MTYPEPHqentFtfC3YGfYGCdTpnY1D3rCcgoOsGwJr0n7VIjkBizfJCj0M2vLuUKvCITBNv7lKoMmFNXY1-jDz5_U_mSFDREEhn1JzDJlPT8mwY5rz2Y68zx_05RAg-_D" />
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                        <button class="bg-surface-container-lowest text-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">menu_book</span></button>
+                        <button class="bg-primary text-on-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">shopping_cart</span></button>
+                    </div>
+                </div>
+                <h3 class="text-lg font-semibold">Herbal Noodle Soup</h3>
+                <p class="text-sm text-on-surface-variant mb-3">280 kcal • Anti-Inflammatory</p>
+                <div class="flex gap-2">
+                    <span
+                        class="bg-secondary-container text-on-secondary-container text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">Comfort</span>
+                    <span
+                        class="bg-surface-container-high text-on-surface-variant text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">Gluten-Free</span>
+                </div>
+            </div>
+            <!-- Card 4 (Extra for carousel feel) -->
+            <div class="min-w-[320px] md:min-w-[380px] group snap-start">
+                <div class="relative h-64 md:h-80 rounded-lg overflow-hidden mb-4">
+                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        data-alt="avocado toast with poached egg"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOuNHT_cjNRPyy6nOJknpBTgm8TSdyrW3SRIY4dBiM8Px2EcXm7E5Jvib0ozouwrsBAoTpDCA8EoAS0OQ0wI8_3hqPksy0XVOH-9iDG11ganHtcv0DXTgQD0Ve9Oco8qJdfeRJwjUBGFaM0VhbkCFwMSFPSdGO0j3UEYkalUdKnJIwV9gLN1o93-yoA83TkGydIEQprHUwdtYyG9pe-u9eW7SZhczNqLtgr2Qxhh_1RCCSGmZu9DUOuBUv8so5Dbo9NWLCu8njvwGe" />
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                        <button class="bg-surface-container-lowest text-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">menu_book</span></button>
+                        <button class="bg-primary text-on-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">shopping_cart</span></button>
+                    </div>
+                </div>
+                <h3 class="text-lg font-semibold">Zen Avocado Toast</h3>
+                <p class="text-sm text-on-surface-variant mb-3">380 kcal • High Protein</p>
+                <div class="flex gap-2">
+                    <span
+                        class="bg-secondary-container text-on-secondary-container text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">Energy</span>
+                    <span
+                        class="bg-surface-container-high text-on-surface-variant text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">Organic</span>
+                </div>
+            </div>
+            <div class="min-w-[320px] md:min-w-[380px] group snap-start">
+                <div class="relative h-64 md:h-80 rounded-lg overflow-hidden mb-4">
+                    <img alt="Rainbow Poke Bowl"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbFogDBW5ITBL9IIxdf5XPZH21Y3_lWNVknwbZh8ZqMYzWII9o_Kt5_4oxJlWRhPqrTSzA94uoL0AQwv23BTo-Lt4i2v8zVD-Tp82H2LevHmdWPMyy-4Z4TVwNJ4rl-cGska2sDz8FcZwBfH1rgfXLph7Q4SmSyAwhz4KpD19EJ58kQfHsaeV9h8-LpFohEkIcEYKz8eSSBnXGvXE-T3_rhVnP_-yqdgtkzeoqFE0ThnY2OHjgP6ieVjGDPnqdbyd3m5UNGLLPssOw" />
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                        <button class="bg-surface-container-lowest text-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">menu_book</span></button>
+                        <button class="bg-primary text-on-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">shopping_cart</span></button>
+                    </div>
+                </div>
+                <h3 class="text-lg font-semibold">Rainbow Poke Bowl</h3>
+                <p class="text-sm text-on-surface-variant mb-3">450 kcal • High Freshness</p>
+                <div class="flex gap-2">
+                    <span
+                        class="bg-secondary-container text-on-secondary-container text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">HEALTHY</span>
+                    <span
+                        class="bg-surface-container-high text-on-surface-variant text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">FRESH</span>
+                </div>
+            </div>
+            <div class="min-w-[320px] md:min-w-[380px] group snap-start">
+                <div class="relative h-64 md:h-80 rounded-lg overflow-hidden mb-4">
+                    <img alt="Moroccan Lentil Soup"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCovTdrLpLVfrNspA1I3DAYdlL5xfEffSbkjyE1AH4MxIwjMK7IQS9jGJGj1XKQXHNkKsi3GMuF0EfzTmeCFYFOa_15Xvdgk-PjFeTg0Q14vjlxMNgj5Ly-LQSWOtwIhu5Dg6XJRxjqlcgIzQ7e9RR5CpsM9OGf4jWpNOpg_qassQarS4PD_ViAUNPy-83Bg1ClAfK_DSDY4D6ADNXpswufSY_W1DlfI5B-JRZl-LVBvZQAifd0PJOW63DeoRpZ_XdYCBQkNkMXldv0" />
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                        <button class="bg-surface-container-lowest text-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">menu_book</span></button>
+                        <button class="bg-primary text-on-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">shopping_cart</span></button>
+                    </div>
+                </div>
+                <h3 class="text-lg font-semibold">Moroccan Lentil Soup</h3>
+                <p class="text-sm text-on-surface-variant mb-3">320 kcal • High Fiber</p>
+                <div class="flex gap-2">
+                    <span
+                        class="bg-secondary-container text-on-secondary-container text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">COMFORT</span>
+                    <span
+                        class="bg-surface-container-high text-on-surface-variant text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">VEGAN</span>
+                </div>
+            </div>
+            <div class="min-w-[320px] md:min-w-[380px] group snap-start">
+                <div class="relative h-64 md:h-80 rounded-lg overflow-hidden mb-4">
+                    <img alt="Quinoa Power Salad"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgEH9ZnRP-rN7L9t42O_QgtgKqZqWqfGY-XY6Zt9vtrIdBqFhqOamhIE2qbfifP9uy8PXuFR78qDfp2vkdt7b3SBgzm9uQX67TuZsOjDlhOVIexiRovDbNBF4ABtDyAryk4WkZVS9bu5KzvWC8GBwwlHyH4W5WxrbhgCNnwu3rDALVpxPZwLclkM30s7nMMYz2pucxw35MUcV1JZrsy8GjQjBrsnc4l1MGOapxNXcSMmkr5Wd2i9zcCL6xOQaoAzurxD8cl2CHuZEz" />
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                        <button class="bg-surface-container-lowest text-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">menu_book</span></button>
+                        <button class="bg-primary text-on-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">shopping_cart</span></button>
+                    </div>
+                </div>
+                <h3 class="text-lg font-semibold">Quinoa Power Salad</h3>
+                <p class="text-sm text-on-surface-variant mb-3">380 kcal • Nutrient Dense</p>
+                <div class="flex gap-2">
+                    <span
+                        class="bg-secondary-container text-on-secondary-container text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">GROUNDING</span>
+                    <span
+                        class="bg-surface-container-high text-on-surface-variant text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">VEGAN</span>
+                </div>
+            </div>
+            <div class="min-w-[320px] md:min-w-[380px] group snap-start">
+                <div class="relative h-64 md:h-80 rounded-lg overflow-hidden mb-4">
+                    <img alt="Lemon Herb Chicken"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJnz_jJ-VLAC9vew3JuVj_tMDlrCBdpcfNx3j5YO0K-tYx7J4_KtGebEWBi-SZS97PODRDESc4eIXHSQmMp_aiZPnQ79eAy1qKZEpZTx4g2hIXKetpn7FnfXWTMsP5d7diLot9JE0lPdJ8NWJFCKZInllBBVxZpdXgfdxcUbYM-RXMC_AtcluaqPsza0RUTLTvJPJNvbC6342VrAkkoyU2tKV3D4IXzUcPD09SqjT7czoQnHXT8xBINgePwaamM7ZMg5ZahNONWJFe" />
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                        <button class="bg-surface-container-lowest text-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">menu_book</span></button>
+                        <button class="bg-primary text-on-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">shopping_cart</span></button>
+                    </div>
+                </div>
+                <h3 class="text-lg font-semibold">Lemon Herb Chicken</h3>
+                <p class="text-sm text-on-surface-variant mb-3">410 kcal • High Protein</p>
+                <div class="flex gap-2">
+                    <span
+                        class="bg-secondary-container text-on-secondary-container text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">BALANCED</span>
+                    <span
+                        class="bg-surface-container-high text-on-surface-variant text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">PROTEIN</span>
+                </div>
+            </div>
+            <div class="min-w-[320px] md:min-w-[380px] group snap-start">
+                <div class="relative h-64 md:h-80 rounded-lg overflow-hidden mb-4">
+                    <img alt="Mixed Berry Yogurt"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl83r2pWBEXkPLJTsb-rDpHrvE6YchOCwRT5VN_LYTbH4dBXpNinrgIHATXraRRqnKAnCutcOStgi9AoO740uKzNE7uEKAjWk25qDVN_B4r_YQ7a-Fyk2czj_-Tdw-5rI-6h9B0oS3tRQjByT72SxDr5uCjHOkFHy2U31dJx9aJqhVpvldUyyREyN-L889U6GE9jxHvJjm1kuaVaQcgR1NoxNSYZfe068fDFf8tko5afyFRf1C35-0pDw_ElQCVHIznu_lEeWqoZ10" />
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                        <button class="bg-surface-container-lowest text-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">menu_book</span></button>
+                        <button class="bg-primary text-on-primary p-3 rounded-full"><span
+                                class="material-symbols-outlined">shopping_cart</span></button>
+                    </div>
+                </div>
+                <h3 class="text-lg font-semibold">Mixed Berry Yogurt</h3>
+                <p class="text-sm text-on-surface-variant mb-3">280 kcal • Antioxidant Rich</p>
+                <div class="flex gap-2">
+                    <span
+                        class="bg-secondary-container text-on-secondary-container text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">COMFORT</span>
+                    <span
+                        class="bg-surface-container-high text-on-surface-variant text-[0.65rem] uppercase font-bold tracking-widest px-3 py-1 rounded-full">HEALTHY</span>
+                </div>
+            </div>
+    
+        </div>
+        <!-- Dots -->
+        <div id="foodDots" class="flex justify-center gap-2 mt-6"></div>
+    </div>
+    </section>
+    <!-- Delivery Tracking Section -->
+    <section class="py-24 bg-surface-container-low" id="tracking">
+        <div class="max-w-7xl mx-auto px-8 grid md:grid-cols-2 gap-16 items-center">
+            <div class="order-2 md:order-1">
+                <div
+                    class="bg-surface-container-lowest p-6 rounded-lg shadow-xl shadow-on-surface/5 relative overflow-hidden">
+                    <div class="h-64 rounded-lg bg-surface-container mb-6 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-stone-200">
+                            <svg class="w-full h-full opacity-30" viewbox="0 0 100 100">
+                                <path d="M10 20 L90 20 M20 10 L20 90 M50 0 L50 100 M0 50 L100 50" stroke="currentColor"
+                                    stroke-width="0.5"></path>
+                            </svg>
+                            <svg class="absolute inset-0 w-full h-full" viewbox="0 0 100 100">
+                                <path d="M20 80 Q50 50 80 20" fill="none" stroke="#535845" stroke-dasharray="5 5"
+                                    stroke-width="2"></path>
+                                <circle cx="80" cy="20" fill="#535845" r="3"></circle>
+                                <circle cx="20" cy="80" fill="#535845" r="3"></circle>
+                            </svg>
+                            <div class="absolute bottom-1/4 left-1/4">
+                                <span class="material-symbols-outlined text-primary text-3xl">electric_scooter</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-xs text-on-surface-variant uppercase tracking-widest mb-1">Estimated Arrival
+                            </p>
+                            <p class="text-2xl font-bold text-primary">10 mins</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-on-surface-variant uppercase tracking-widest mb-1">Status</p>
+                            <p class="text-sm font-semibold">On the way</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="order-1 md:order-2 space-y-6">
+                <h2 class="text-[1.75rem] font-medium leading-tight">Follow your meal's journey in real-time.</h2>
+                <p class="text-on-surface-variant">From the kitchen to your doorstep, see every step. We prioritize
+                    eco-friendly delivery to match your wellness goals.</p>
+                <ul class="space-y-4">
+                    <li class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">check_circle</span>
+                        <span>Hyper-local preparation</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">check_circle</span>
+                        <span>Eco-friendly packaging only</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- Wellness Dashboard Section -->
+    <section class="py-24" id="wellness">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-[1.75rem] font-medium">Your Wellness at a Glance</h2>
+                <p class="text-on-surface-variant">Holistic data to help you understand the food-mood connection.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-secondary-container p-8 rounded-lg flex flex-col justify-between h-64">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-on-secondary-container font-bold mb-2">Weekly
+                            Mood Score</p>
+                        <p class="text-5xl font-bold text-on-secondary-container">7.8</p>
+                    </div>
+                    <div class="h-12 w-full mt-4 flex items-end gap-1">
+                        <div class="w-1/6 bg-on-secondary-container/20 h-1/2 rounded-full"></div>
+                        <div class="w-1/6 bg-on-secondary-container/20 h-2/3 rounded-full"></div>
+                        <div class="w-1/6 bg-on-secondary-container/20 h-1/3 rounded-full"></div>
+                        <div class="w-1/6 bg-on-secondary-container h-full rounded-full"></div>
+                        <div class="w-1/6 bg-on-secondary-container/20 h-3/4 rounded-full"></div>
+                        <div class="w-1/6 bg-on-secondary-container/20 h-1/2 rounded-full"></div>
+                    </div>
+                </div>
+                <div class="bg-surface-container-low p-8 rounded-lg flex flex-col justify-between h-64">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Today's
+                            Steps</p>
+                        <p class="text-5xl font-bold">5,400</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="flex-1 bg-surface-variant h-2 rounded-full">
+                            <div class="bg-primary h-2 w-[54%] rounded-full"></div>
+                        </div>
+                        <span class="text-xs font-bold text-primary">54%</span>
+                    </div>
+                </div>
+                <div class="bg-surface-container-low p-8 rounded-lg flex flex-col justify-between h-64">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Calories</p>
+                        <p class="text-5xl font-bold">1,250 <span
+                                class="text-sm font-normal text-on-surface-variant">kcal</span></p>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="material-symbols-outlined text-primary">nutrition</span>
+                        <span class="text-sm">Within your daily target</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Features Section -->
+    <section class="py-24 bg-surface-container-low">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="grid md:grid-cols-3 gap-12">
+                <div
+                    class="bg-surface-container-lowest p-10 rounded-lg shadow-sm hover:translate-y-[-8px] transition-all">
+                    <div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-primary">psychology</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Mood-based Suggestions</h3>
+                    <p class="text-on-surface-variant leading-relaxed">Our AI learns how different ingredients impact
+                        your serotonin and dopamine levels.</p>
+                </div>
+                <div
+                    class="bg-surface-container-lowest p-10 rounded-lg shadow-sm hover:translate-y-[-8px] transition-all">
+                    <div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-primary">favorite</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Health Preferences</h3>
+                    <p class="text-on-surface-variant leading-relaxed">Filter by allergies, lifestyle, and fitness goals
+                        with a single tap.</p>
+                </div>
+                <div
+                    class="bg-surface-container-lowest p-10 rounded-lg shadow-sm hover:translate-y-[-8px] transition-all">
+                    <div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-primary">explore</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Food Browsing</h3>
+                    <p class="text-on-surface-variant leading-relaxed">Discover local restaurants that specialize in the
+                        specific nutrients you need.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Team Section -->
+    <section class="py-24" id="team">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-[1.75rem] font-medium">Meet the Minds Behind MoodBite</h2>
+                <p class="text-on-surface-variant">A team of programmers, designers, and foodies.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="text-center group">
+                    <div
+                        class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 group-hover:scale-105 transition-transform ring-4 ring-transparent group-hover:ring-secondary-container">
+                        <img class="w-full h-full object-cover" data-alt="Austin Dave T. Feguro"
+                            src="https://lh3.googleusercontent.com/aida/ADBb0uhGjzMigS2ao9etSoePNT0sdlLVZDdx3em4NheVtnpW-SDBCVzpZYBSjqH-9idxFITJgze0qYRKTv8JkgCu98K41WGMnJr9mKYQDc6iSTUAPjb_E_b2ppovXPuKpd95xSd4DtPfjVJ5o63hkub_JeRhn5qTxX6MwYL9Cr0H4m4LpmjAjOk0OQvpF3hEmQ0rFEFabFEAPStNwZbY5pxfCj_9tOIPO9Zm9PCvbdhPTpEVIQvvVpdJwJDePAU_RDYTYqP-eY7a27tAiw" />
+                    </div>
+                    <h4 class="font-bold">Jevie John V. Calderon</h4>
+                    <p class="text-sm text-on-surface-variant">CEO/Documentarian</p>
+                </div>
+                <div class="text-center group">
+                    <div
+                        class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 group-hover:scale-105 transition-transform ring-4 ring-transparent group-hover:ring-secondary-container">
+                        <img class="w-full h-full object-cover" data-alt="Jevie John V. Calderon"
+                            src="https://lh3.googleusercontent.com/aida/ADBb0ujiebEI2ix4--3GYdujRXlSRebeiiJFMtWJeEVmJqfkwKGFZdF_KVqM98yErbLXNJ9vOxgSvAvFhZaFGbze_kB8au6fGSFoA33tiI0gS-u8RcCFQyQoCxQIBiUZGAjJv6hF9RZG-fOKRC0AtudaX7LCN62LzjJ5nY00L21hCipAD13D5qpp7CmmnXitbhLxrnplmH-xVpQJ4m8apYV81I7sH4oGpXovZ4L4yg5PT7JF3j6q0Eraa0oGGJfy6CPtq1jHu4e3xZZ-QQ" />
+                    </div>
+                    <h4 class="font-bold">Austin Dave T. Feguro</h4>
+                    <p class="text-sm text-on-surface-variant">CTO/Programmer</p>
+                </div>
+                <div class="text-center group">
+                    <div
+                        class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4 group-hover:scale-105 transition-transform ring-4 ring-transparent group-hover:ring-secondary-container">
+                        <img class="w-full h-full object-cover" data-alt="Kent Erwin D. Camiling"
+                            src="https://lh3.googleusercontent.com/aida/ADBb0uibrkf7Gp3X5ehz_aPlGXR0nZ9rzXqLbuQPwX0kQZEZahvxYHftVrPzQpHoemMU7WI26BhVxy42r8DKyicy4sOqpQ-7Jjiat2kiD-qzoa_8vBYEsJs22zOumSQk4eji4B76sgcPWTH3qEeWOwMgBhdeDNM-Hejyc3qZms2_eOD_dGFQUUHyyp4UutpW3uAwAEGykPKLxzA9hGlaJAfgUSUwz2YsXxmEy_1X5BCbSv2NrKmRyHTq3pK3HZ7bho7aKjeTCW19XXOGyps" />
+                    </div>
+                    <h4 class="font-bold">Kent Erwin D. Camiling</h4>
+                    <p class="text-sm text-on-surface-variant">COO/Project Manager</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Final CTA -->
+    <section class="py-24 px-8">
+        <div
+            class="max-w-5xl mx-auto bg-secondary-container rounded-xl p-12 md:p-20 text-center relative overflow-hidden">
+            <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/10 organic-blob"></div>
+            <div class="relative z-10 space-y-8">
+                <h2 class="text-4xl md:text-5xl font-semibold leading-tight">Ready to transform your relationship with
+                    food?</h2>
+                <p class="text-lg max-w-2xl mx-auto opacity-80">Join 50,000+ users who are finding their zen through
+                    better eating habits.</p>
+                <button
+                    class="bg-primary text-on-primary px-12 py-5 rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-xl shadow-primary/20">Get
+                    Recommendations</button>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="w-full rounded-t-[3rem] mt-20 bg-stone-100 dark:bg-stone-950">
+        <div class="flex flex-col md:flex-row justify-between items-center px-12 py-10 w-full">
+            <div class="text-lg font-semibold text-stone-800 dark:text-stone-200 mb-6 md:mb-0">MoodBite</div>
+            <div class="flex flex-wrap justify-center gap-8 mb-6 md:mb-0">
+                <a class="text-stone-500 dark:text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest"
+                    href="#">Privacy</a>
+                <a class="text-stone-500 dark:text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest"
+                    href="#">Terms</a>
+                <a class="text-stone-500 dark:text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest"
+                    href="#">Support</a>
+                <a class="text-stone-500 dark:text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest"
+                    href="#">Instagram</a>
+            </div>
+            <p class="font-['Plus_Jakarta_Sans'] text-xs uppercase tracking-widest text-stone-600 dark:text-stone-400">©
+                2024 MoodBite. Crafted for serenity.</p>
+        </div>
+    </footer>
+    <script>
+            const slider = document.getElementById("reco-slider");
+            const dotsContainer = document.getElementById("foodDots");
+
+            const cards = slider.children;
+            const cardsPerPage = 3;
+
+            // total pages (groups of 3)
+            const totalPages = Math.ceil(cards.length / cardsPerPage);
+
+            let activePage = 0;
+
+            // Create dots per PAGE (not per card)
+            for (let i = 0; i < totalPages; i++) {
+                const dot = document.createElement("div");
+                dot.className = "w-2.5 h-2.5 rounded-full bg-gray-300 cursor-pointer transition";
+                dot.onclick = () => scrollToPage(i);
+                dotsContainer.appendChild(dot);
+            }
+
+            const dots = dotsContainer.children;
+
+            function updateDots() {
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].classList.toggle("bg-primary", i === activePage);
+                    dots[i].classList.toggle("bg-gray-300", i !== activePage);
+                }
+            }
+
+            function scrollToPage(page) {
+                    if (page < 0) page = 0;
+                    if (page >= totalPages) page = totalPages - 1;
+
+                    const startIndex = page * cardsPerPage;
+                    const card = cards[startIndex];
+
+                    if (!card) return;
+
+                    slider.scrollTo({
+                        left: card.offsetLeft,
+                        behavior: "smooth"
+                    });
+
+                    activePage = page;
+                    updateDots();
+                }
+            // detect page on scroll
+            function getVisiblePage() {
+                const center = slider.scrollLeft + slider.offsetWidth / 2;
+
+                let closestPage = 0;
+                let minDiff = Infinity;
+
+                for (let p = 0; p < totalPages; p++) {
+                    const firstCard = cards[p * cardsPerPage];
+                    if (!firstCard) continue;
+
+                    const pageCenter =
+                        firstCard.offsetLeft + (firstCard.offsetWidth * cardsPerPage) / 2;
+
+                    const diff = Math.abs(center - pageCenter);
+
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        closestPage = p;
+                    }
+                }
+
+                activePage = closestPage;
+                updateDots();
+            }
+
+            slider.addEventListener("scroll", () => {
+                window.requestAnimationFrame(getVisiblePage);
+            });
+
+            updateDots();
+        const sections = document.querySelectorAll("section[id]");
+            const navLinks = document.querySelectorAll(".nav-link");
+
+            function setActiveNav() {
+                    let currentSection = "";
+
+                    sections.forEach((section) => {
+                        const sectionTop = section.offsetTop - 150;
+                        const sectionBottom = sectionTop + section.offsetHeight;
+
+                        if (scrollY >= sectionTop && scrollY < sectionBottom) {
+                            currentSection = section.getAttribute("id");
+                        }
+                    });
+
+                    navLinks.forEach((link) => {
+                        const isActive = link.getAttribute("href") === "#" + currentSection;
+                        link.classList.toggle("active-nav", isActive);
+                    });
+                }
+
+            window.addEventListener("scroll", setActiveNav);
+
+           navLinks.forEach(link => {
+                link.addEventListener("click", () => {
+                    navLinks.forEach(l => l.classList.remove("active-nav"));
+                    link.classList.add("active-nav");
+                });
+            });
+    </script>
+</body>
+
+</html>
