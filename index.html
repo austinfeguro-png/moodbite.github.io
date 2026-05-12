@@ -1,0 +1,2119 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>MoodBite — Eat what you need</title>
+
+  <!-- Fonts: Cormorant Garamond (headings) + Inter (body) — exact match to mobile app -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0..1" rel="stylesheet" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    /* ─── Brand tokens ──────────────────────────────────────────────────── */
+    :root {
+      --olive: #6B7A3A;
+      --olive-light: #7E9040;
+      --olive-dark: #556030;
+      --olive-muted: #A3B068;
+      --cream: #F2F2E6;
+      --cream-dark: #E8E8D8;
+      --moss: #A3A380;
+      --sidebar: #1A1F0E;
+      --on-olive: #FFFFFF;
+      --text-primary: #1F2937;
+      --text-muted: #6B7280;
+      --error: #EF4444;
+      --success: #10B981;
+    }
+
+    /* ─── Base ──────────────────────────────────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+      background: var(--olive-muted);
+      color: #fff;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* ─── Utility ───────────────────────────────────────────────────────── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section {
+      padding: 6rem 0;
+    }
+
+    .section-alt {
+      background: #EAEADA;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      transition: all .2s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--olive);
+      color: #fff;
+      padding: .85rem 2.25rem;
+      border-radius: 50px;
+      box-shadow: 0 4px 16px rgba(107, 122, 58, .35);
+    }
+
+    .btn-primary:hover {
+      background: var(--olive-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(107, 122, 58, .4);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--olive);
+      padding: .85rem 1.75rem;
+      border-radius: 50px;
+      border: 2px solid var(--olive);
+    }
+
+    .btn-ghost:hover {
+      background: var(--olive);
+      color: #fff;
+    }
+
+    .btn-sm {
+      padding: .55rem 1.25rem;
+      font-size: .8rem;
+    }
+
+    /* Tags / pills */
+    .pill {
+      display: inline-block;
+      padding: .25rem .75rem;
+      border-radius: 20px;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+    }
+
+    .pill-olive {
+      background: rgba(107, 122, 58, .12);
+      color: var(--olive);
+    }
+
+    .pill-muted {
+      background: var(--cream-dark);
+      color: var(--text-muted);
+    }
+
+    /* ─── Nav ───────────────────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(242, 242, 230, .88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(107, 122, 58, .1);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--olive);
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      font-size: .875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 4px;
+      transition: color .2s;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--olive);
+      transition: width .25s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--olive);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    @media(max-width:768px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    /* ─── Hero ──────────────────────────────────────────────────────────── */
+    #hero {
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--cream) 0%, #E8E8D8 100%);
+    }
+
+    .hero-blob-1 {
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, rgba(107, 122, 58, .12) 0%, transparent 70%);
+      border-radius: 60% 40% 30% 70%/60% 30% 70% 40%;
+      top: -80px;
+      right: -80px;
+      z-index: 0;
+    }
+
+    .hero-blob-2 {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(163, 163, 128, .15) 0%, transparent 70%);
+      border-radius: 40% 60% 70% 30%/40% 70% 30% 60%;
+      bottom: -40px;
+      left: -60px;
+      z-index: 0;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media(max-width:768px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 6vw, 5rem);
+      line-height: 1.05;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title em {
+      color: var(--olive);
+      font-style: italic;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      max-width: 460px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Phone mockup */
+    .phone-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone {
+      width: 260px;
+      height: 530px;
+      background: #1A1F0E;
+      border-radius: 40px;
+      padding: 10px;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, .25);
+      position: relative;
+    }
+
+    .phone-inner {
+      width: 100%;
+      height: 100%;
+      background: var(--cream);
+      border-radius: 32px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .phone-carousel {
+      display: flex;
+      width: 400%;
+      height: 100%;
+      animation: phoneScroll 12s infinite ease-in-out;
+    }
+
+    @keyframes phoneScroll {
+
+      0%,
+      20% {
+        transform: translateX(0);
+      }
+
+      25%,
+      45% {
+        transform: translateX(-25%);
+      }
+
+      50%,
+      70% {
+        transform: translateX(-50%);
+      }
+
+      75%,
+      95% {
+        transform: translateX(-75%);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .phone-screen {
+      width: 25%;
+      height: 100%;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .phone-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(26, 31, 14, .7), transparent);
+      padding: 1.5rem 1rem;
+    }
+
+    .phone-label {
+      background: rgba(242, 242, 230, .95);
+      border-radius: 12px;
+      padding: .75rem 1rem;
+    }
+
+    .phone-label-tag {
+      font-size: .6rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--olive);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .phone-label-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+
+    /* ─── Moods ─────────────────────────────────────────────────────────── */
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      max-width: 800px;
+      margin: 0 auto 2.5rem;
+    }
+
+    @media(max-width:640px) {
+      .mood-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .mood-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all .2s ease;
+      font-family: 'Inter', sans-serif;
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .mood-card:hover,
+    .mood-card.active {
+      border-color: var(--olive);
+      color: var(--olive);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(107, 122, 58, .2);
+    }
+
+    .mood-card .emoji {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: .75rem;
+      transition: transform .2s;
+    }
+
+    .mood-card:hover .emoji,
+    .mood-card.active .emoji {
+      transform: scale(1.15);
+    }
+
+    /* ─── Recommendations slider ────────────────────────────────────────── */
+    .slider-wrap {
+      position: relative;
+      padding: 0 2rem;
+    }
+
+    .slider-track {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      padding: 1rem .5rem 2rem;
+      cursor: grab;
+    }
+
+    .slider-track:active {
+      cursor: grabbing;
+    }
+
+    .slider-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .slider-track::before,
+    .slider-track::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 60px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .slider-track::before {
+      left: 0;
+      background: linear-gradient(to right, var(--cream), transparent);
+    }
+
+    .slider-track::after {
+      right: 0;
+      background: linear-gradient(to left, var(--cream), transparent);
+    }
+
+    .food-card {
+      min-width: 300px;
+      scroll-snap-align: start;
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    .food-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .12);
+      z-index: 5;
+    }
+
+    .food-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      transition: transform .5s ease;
+    }
+
+    .food-card:hover img {
+      transform: scale(1.08);
+    }
+
+    .food-card-img {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .food-card-hover {
+      position: absolute;
+      inset: 0;
+      background: rgba(26, 31, 14, .45);
+      opacity: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      transition: opacity .25s;
+    }
+
+    .food-card:hover .food-card-hover {
+      opacity: 1;
+    }
+
+    .food-card-action {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .2s;
+    }
+
+    .food-card-action:hover {
+      transform: scale(1.1);
+    }
+
+    .fca-recipe {
+      background: white;
+      color: var(--olive);
+    }
+
+    .fca-cart {
+      background: var(--olive);
+      color: white;
+    }
+
+    .food-card-body {
+      padding: 1.25rem;
+    }
+
+    .food-card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: .25rem;
+    }
+
+    .food-card-meta {
+      font-size: .8rem;
+      color: var(--text-muted);
+      margin-bottom: .75rem;
+    }
+
+    .slider-nav {
+      display: flex;
+      gap: .75rem;
+    }
+
+    .slider-nav-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(107, 122, 58, .3);
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s;
+      color: var(--olive);
+    }
+
+    .slider-nav-btn:hover {
+      background: var(--olive);
+      color: white;
+      border-color: var(--olive);
+    }
+
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      gap: .5rem;
+      margin-top: 1.5rem;
+    }
+
+    .slider-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #D1D5DB;
+      cursor: pointer;
+      transition: all .2s;
+      border: none;
+    }
+
+    .slider-dot.active {
+      background: var(--olive);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    /* ─── Delivery / Leaflet ─────────────────────────────────────────────── */
+    #delivery-map {
+      height: 380px;
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .12);
+    }
+
+    /* Override Leaflet attribution colour to match theme */
+    .leaflet-control-attribution a {
+      color: var(--olive);
+    }
+
+    .tracking-card {
+      background: white;
+      border-radius: 24px;
+      padding: 1.75rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .08);
+    }
+
+    .tracking-status {
+      background: var(--olive);
+      color: white;
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ts-label {
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: .75;
+    }
+
+    .ts-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .ts-status {
+      text-align: right;
+    }
+
+    .ts-status .ts-value {
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+    }
+
+    .tracking-steps {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+
+    .tracking-step {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-size: .875rem;
+      color: var(--text-muted);
+    }
+
+    .tracking-step .step-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--cream-dark);
+      flex-shrink: 0;
+    }
+
+    .tracking-step.done .step-dot {
+      background: var(--olive);
+    }
+
+    .tracking-step.done {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .tracking-step.active .step-dot {
+      background: var(--olive);
+      box-shadow: 0 0 0 4px rgba(107, 122, 58, .2);
+    }
+
+    /* ─── Wellness ───────────────────────────────────────────────────────── */
+    .wellness-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media(max-width:768px) {
+      .wellness-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .wellness-card {
+      border-radius: 28px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .wc-olive {
+      background: var(--olive);
+      color: white;
+    }
+
+    .wc-cream {
+      background: white;
+      color: var(--text-primary);
+      border: 1px solid var(--cream-dark);
+    }
+
+    .wc-title {
+      font-size: .65rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      opacity: .7;
+      margin-bottom: .5rem;
+    }
+
+    .wc-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .wc-bg-icon {
+      position: absolute;
+      right: -12px;
+      bottom: -12px;
+      font-size: 6rem;
+      opacity: .08;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, .2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: white;
+    }
+
+    .wc-cream .progress-bar {
+      background: var(--cream-dark);
+    }
+
+    .wc-cream .progress-fill {
+      background: var(--olive);
+    }
+
+    .mini-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 40px;
+      margin-top: .5rem;
+    }
+
+    .mini-bar {
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      background: rgba(255, 255, 255, .25);
+    }
+
+    /* ─── Features ───────────────────────────────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    @media(max-width:768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 24px;
+      padding: 2.5rem;
+      transition: transform .3s ease, box-shadow .3s ease;
+      border: 1px solid var(--cream-dark);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, .08);
+    }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(107, 122, 58, .1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--olive);
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: .75rem;
+    }
+
+    .feature-desc {
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-size: .9rem;
+    }
+
+    /* ─── Team ───────────────────────────────────────────────────────────── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+
+    @media(max-width:768px) {
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .team-card {
+      text-align: center;
+    }
+
+    .team-avatar-wrap {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 1.25rem;
+      position: relative;
+      ring: 4px;
+      transition: transform .3s ease;
+      border: 4px solid transparent;
+      box-shadow: 0 0 0 4px var(--cream-dark);
+    }
+
+    .team-card:hover .team-avatar-wrap {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 4px var(--olive);
+    }
+
+    .team-avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .team-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+    }
+
+    .team-role {
+      font-size: .85rem;
+      color: var(--text-muted);
+      margin-top: .25rem;
+    }
+
+    /* ─── CTA ────────────────────────────────────────────────────────────── */
+    .cta-section {
+      background: var(--sidebar);
+      position: relative;
+      overflow: hidden;
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+
+    .cta-blob {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(107, 122, 58, .25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .cta-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--cream);
+      font-weight: 500;
+      max-width: 700px;
+      margin: 0 auto 1.25rem;
+    }
+
+    .cta-desc {
+      color: rgba(242, 242, 230, .6);
+      font-size: 1.05rem;
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────────────────────── */
+    footer {
+      background: var(--sidebar);
+      border-top: 1px solid rgba(255, 255, 255, .05);
+      padding: 3rem 2rem;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--cream);
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(242, 242, 230, .45);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--olive);
+    }
+
+    .footer-copy {
+      font-size: .75rem;
+      color: rgba(242, 242, 230, .3);
+      letter-spacing: .5px;
+    }
+
+    /* ─── Misc ───────────────────────────────────────────────────────────── */
+    .section-tag {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--olive);
+      margin-bottom: .75rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 500;
+      margin-bottom: .75rem;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    @media(max-width:768px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .check-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .875rem;
+      margin-top: 1.5rem;
+    }
+
+    .check-list li {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-size: .9rem;
+    }
+
+    .check-list li::before {
+      content: '✓';
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(107, 122, 58, .12);
+      color: var(--olive);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      display: inline-flex;
+    }
+
+    /* Leaflet custom marker */
+    .rider-marker {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .dest-marker {
+      font-size: 22px;
+      line-height: 1;
+    }
+    .nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.nav-logo img {
+  width: 55px;   /* adjust size here */
+  height: 55px;
+  object-fit: contain;
+}
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN + WELLNESS HOVER EFFECTS
+   READY TO PASTE
+══════════════════════════════════════════════════════════ */
+
+/* ─── NAV LOGO ───────────────────────────── */
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  font-weight: 700;
+  color: var(--olive);
+  flex-shrink: 0;
+}
+
+.nav-logo img {
+  width: clamp(42px, 5vw, 60px);
+  height: clamp(42px, 5vw, 60px);
+  object-fit: contain;
+  display: block;
+}
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  font-weight: 700;
+  color: var(--olive);
+  flex-shrink: 0;
+}
+
+.footer-logo img {
+  width: clamp(42px, 5vw, 60px);
+  height: clamp(42px, 5vw, 60px);
+  object-fit: contain;
+  display: block;
+}
+
+
+/* ─────────────────────────────────────────────
+   WELLNESS CARDS — CONSISTENT ACTIVE HOVER
+───────────────────────────────────────────── */
+
+.wellness-card {
+  background: white;
+  color: var(--text-primary);
+  border: 2px solid transparent;
+  transition:
+    transform 0.35s ease,
+    background 0.35s ease,
+    color 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+  cursor: pointer;
+}
+
+/* DEFAULT WHITE STATE */
+.wc-olive,
+.wc-cream {
+  background: white;
+  color: var(--text-primary);
+}
+
+/* DEFAULT ICON COLOR */
+.wellness-card .wc-bg-icon {
+  color: rgba(107, 122, 58, 0.12);
+  transition: all 0.35s ease;
+}
+
+/* DEFAULT VALUE COLOR */
+.wellness-card .wc-value {
+  color: var(--olive);
+  transition: all 0.35s ease;
+}
+
+/* DEFAULT TITLE COLOR */
+.wellness-card .wc-title {
+  color: var(--text-muted);
+  transition: color 0.35s ease;
+}
+
+/* ACTIVE HOVER STATE */
+.wellness-card:hover {
+  background: var(--olive);
+  color: white;
+  border-color: var(--olive);
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 45px rgba(107, 122, 58, 0.28);
+}
+
+/* TEXTS TURN WHITE */
+.wellness-card:hover .wc-title,
+.wellness-card:hover .wc-value,
+.wellness-card:hover span,
+.wellness-card:hover div {
+  color: white !important;
+}
+
+/* ICON ANIMATION */
+.wellness-card:hover .wc-bg-icon {
+  color: rgba(255, 255, 255, 0.12) !important;
+  transform: scale(1.15) rotate(8deg);
+}
+
+/* PROGRESS BAR */
+.wellness-card:hover .progress-bar {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.wellness-card:hover .progress-fill {
+  background: white;
+}
+
+/* MINI BARS */
+.wellness-card:hover .mini-bar {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.wellness-card:hover .mini-bar:nth-child(4) {
+  background: white;
+}
+
+/* ─── GENERAL RESPONSIVE FIXES ───────────── */
+img {
+  max-width: 100%;
+}
+
+/* ─── TABLET RESPONSIVE ──────────────────── */
+@media (max-width: 1024px) {
+
+  .container {
+    padding: 0 1.5rem;
+  }
+
+  .hero-grid,
+  .two-col,
+  .features-grid,
+  .wellness-grid,
+  .team-grid {
+    gap: 2rem;
+  }
+
+  .food-card {
+    min-width: 280px;
+  }
+}
+
+/* ─── MOBILE RESPONSIVE ──────────────────── */
+@media (max-width: 768px) {
+
+  /* NAV */
+  .nav-inner {
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .btn-sm {
+    padding: 0.7rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  /* HERO */
+  #hero {
+    min-height: auto;
+    padding: 4rem 0;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 3rem;
+  }
+
+  .hero-desc {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+  }
+
+  .hero-btns {
+    justify-content: center;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  /* PHONE */
+  .phone {
+    width: 220px;
+    height: 460px;
+  }
+
+  /* MOOD GRID */
+  .mood-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* FEATURES */
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* WELLNESS */
+  .wellness-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wellness-card {
+    min-height: 200px;
+  }
+
+  .wc-value {
+    font-size: 2.8rem;
+  }
+
+  /* TEAM */
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-avatar-wrap {
+    width: 120px;
+    height: 120px;
+  }
+
+  /* TWO COLUMN */
+  .two-col {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  /* MAP */
+  #delivery-map {
+    height: 300px;
+  }
+
+  /* CTA */
+  .cta-section {
+    padding: 4rem 1.5rem;
+  }
+
+  /* FOOTER */
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-links {
+    justify-content: center;
+  }
+}
+
+/* ─── SMALL MOBILE ───────────────────────── */
+@media (max-width: 480px) {
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .section {
+    padding: 4rem 0;
+  }
+
+  .hero-title {
+    font-size: 2.4rem;
+    line-height: 1.1;
+  }
+
+  .hero-desc {
+    font-size: 0.95rem;
+  }
+
+  .phone {
+    width: 190px;
+    height: 400px;
+  }
+
+  .food-card {
+    min-width: 88%;
+  }
+
+  .food-card img {
+    height: 180px;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .wc-value {
+    font-size: 2.2rem;
+  }
+
+  .feature-card,
+  .tracking-card,
+  .wellness-card {
+    padding: 1.5rem;
+  }
+
+  .mood-card {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .mood-card .emoji {
+    font-size: 2rem;
+  }
+
+  .tracking-status {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .ts-status {
+    text-align: left;
+  }
+
+  .footer-links {
+    gap: 1rem;
+  }
+}
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+     NAV
+════════════════════════════════════════════════════════════ -->
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo"><img src="images\logomood1.png" alt=""> MOODBITE</div>
+      <div class="nav-links">
+        <a href="#hero">Home</a>
+        <a href="#moods">Moods</a>
+        <a href="#recommendations">Menu</a>
+        <a href="#tracking">Tracking</a>
+        <a href="#wellness">Wellness</a>
+        <a href="#team">Team</a>
+      </div>
+      <a href="#moods" class="btn btn-primary btn-sm">Get App</a>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════════════════ -->
+  <section id="hero" style="padding: 5rem 0 6rem;">
+    <div class="hero-blob-1"></div>
+    <div class="hero-blob-2"></div>
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Text -->
+        <div>
+          <span class="section-tag">Mood-based food delivery</span>
+          <h1 class="hero-title">
+            Eat what<br>
+            <em>you need.</em>
+          </h1>
+          <p class="hero-desc">
+            MoodBite listens to your emotions and body signals to suggest the perfect meal. Because what you eat defines
+            how you feel.
+          </p>
+          <div class="hero-btns">
+            <a href="#moods" class="btn btn-primary">Get Started</a>
+            <a href="#tracking" class="btn btn-ghost">See Delivery →</a>
+          </div>
+        </div>
+
+        <!-- Phone mockup -->
+        <div class="phone-wrap" style="position:relative;">
+          <div class="phone">
+            <div class="phone-inner">
+              <div class="phone-carousel">
+                <!-- Screen 1: Food -->
+                <div class="phone-screen">
+                  <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&auto=format&fit=crop"
+                    style="width:100%;height:100%;object-fit:cover;" alt="Food" />
+                  <div class="phone-overlay">
+                    <div class="phone-label">
+                      <div class="phone-label-tag">Mood Choice</div>
+                      <div class="phone-label-name">Chicken Teriyaki Bowl</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Screen 2: Mood -->
+                <div class="phone-screen"
+                  style="background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.25rem;padding:2rem;">
+                  <h4
+                    style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;text-align:center;color:var(--olive)">
+                    How are you feeling today?</h4>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;width:100%;">
+                    <div
+                      style="background:white;padding:1rem;border-radius:16px;text-align:center;font-size:1.75rem;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+                      😊</div>
+                    <div
+                      style="background:white;padding:1rem;border-radius:16px;text-align:center;font-size:1.75rem;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+                      😴</div>
+                    <div
+                      style="background:white;padding:1rem;border-radius:16px;text-align:center;font-size:1.75rem;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+                      😣</div>
+                    <div
+                      style="background:white;padding:1rem;border-radius:16px;text-align:center;font-size:1.75rem;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+                      😠</div>
+                  </div>
+                  <button
+                    style="width:100%;padding:.75rem;background:var(--olive);color:white;border:none;border-radius:50px;font-weight:600;cursor:pointer;">Continue</button>
+                </div>
+                <!-- Screen 3: Tracking (mini) -->
+                <div class="phone-screen"
+                  style="background:var(--cream);display:flex;flex-direction:column;padding:1.5rem;gap:1rem;">
+                  <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--olive)">On the way 🛵
+                  </h4>
+                  <div
+                    style="flex:1;background:var(--cream-dark);border-radius:16px;position:relative;overflow:hidden;">
+                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;">🛵
+                    </div>
+                  </div>
+                  <div style="background:var(--olive);color:white;border-radius:16px;padding:1rem;">
+                    <div style="font-size:.6rem;font-weight:700;letter-spacing:1px;opacity:.75;">ETA</div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:600;">12 mins</div>
+                  </div>
+                </div>
+                <!-- Screen 4: Wellness -->
+                <div class="phone-screen"
+                  style="background:var(--cream);display:flex;flex-direction:column;padding:1.5rem;gap:.75rem;justify-content:center;">
+                  <div style="background:var(--olive);color:white;border-radius:20px;padding:1.25rem;">
+                    <div style="font-size:.6rem;font-weight:800;letter-spacing:1px;opacity:.75;">MOOD SCORE</div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:500;">8.4</div>
+                  </div>
+                  <div style="background:white;border-radius:20px;padding:1.25rem;">
+                    <div style="font-size:.6rem;font-weight:800;letter-spacing:1px;color:var(--text-muted);">DAILY STEPS
+                    </div>
+                    <div
+                      style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:500;color:var(--olive);">
+                      6,842</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+     MOOD SELECTION
+════════════════════════════════════════════════════════════ -->
+  <section id="moods" class="section section-alt">
+    <div class="container" style="text-align:center;">
+      <span class="section-tag">Pick your mood</span>
+      <h2 class="section-title">How are you feeling right now?</h2>
+      <p class="section-desc" style="max-width:480px;margin:0 auto 3rem;">
+        Tell us your current emotional state and we'll match the perfect mood-boosting meal.
+      </p>
+      <div class="mood-grid">
+        <button class="mood-card active" onclick="selectMood(this)"><span class="emoji">😊</span>Happy</button>
+        <button class="mood-card" onclick="selectMood(this)"><span class="emoji">😢</span>Sad</button>
+        <button class="mood-card" onclick="selectMood(this)"><span class="emoji">😣</span>Stressed</button>
+        <button class="mood-card" onclick="selectMood(this)"><span class="emoji">😴</span>Tired</button>
+        <button class="mood-card" onclick="selectMood(this)"><span class="emoji">😠</span>Angry</button>
+        <button class="mood-card" onclick="selectMood(this)"><span class="emoji">😰</span>Anxious</button>
+        <button class="mood-card" onclick="selectMood(this)"><span class="emoji">🧘</span>Calm</button>
+        <button class="mood-card" onclick="selectMood(this)"><span class="emoji">🤩</span>Excited</button>
+        <button class="mood-card" onclick="selectMood(this)"><span class="emoji">🥱</span>Bored</button>
+        <button class="mood-card" onclick="selectMood(this)"><span class="emoji">👤</span>Lonely</button>
+      </div>
+      <a href="#recommendations" class="btn btn-primary" style="font-size:1rem;padding:1rem 3rem;">
+        Find My Meals →
+      </a>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+     RECOMMENDATIONS
+════════════════════════════════════════════════════════════ -->
+  <section id="recommendations" class="section">
+    <div class="container">
+      <div
+        style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <span class="section-tag">Tailored for you</span>
+          <h2 class="section-title" style="margin-bottom:.25rem;">Your Mood Menu</h2>
+          <p class="section-desc">Based on your mood, we suggest these calming meals.</p>
+        </div>
+        <div class="slider-nav">
+          <button class="slider-nav-btn" onclick="sliderPrev()">
+            <span class="material-symbols-outlined" style="font-size:20px;">chevron_left</span>
+          </button>
+          <button class="slider-nav-btn" onclick="sliderNext()">
+            <span class="material-symbols-outlined" style="font-size:20px;">chevron_right</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="slider-wrap">
+      <div class="slider-track" id="sliderTrack">
+
+        <!-- Card 1 -->
+        <div class="food-card">
+          <div class="food-card-img">
+            <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&auto=format&fit=crop"
+              alt="Miso Glazed Salmon" />
+            <div class="food-card-hover">
+              <button class="food-card-action fca-recipe"><span class="material-symbols-outlined"
+                  style="font-size:20px;">menu_book</span></button>
+              <button class="food-card-action fca-cart"><span class="material-symbols-outlined"
+                  style="font-size:20px;">shopping_cart</span></button>
+            </div>
+          </div>
+          <div class="food-card-body">
+            <div class="food-card-name">Miso Glazed Salmon</div>
+            <div class="food-card-meta">450 kcal · High Omega-3 · ₱450</div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+              <span class="pill pill-olive">Calming</span>
+              <span class="pill pill-muted">Healthy</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="food-card">
+          <div class="food-card-img">
+            <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&auto=format&fit=crop"
+              alt="Roasted Squash Salad" />
+            <div class="food-card-hover">
+              <button class="food-card-action fca-recipe"><span class="material-symbols-outlined"
+                  style="font-size:20px;">menu_book</span></button>
+              <button class="food-card-action fca-cart"><span class="material-symbols-outlined"
+                  style="font-size:20px;">shopping_cart</span></button>
+            </div>
+          </div>
+          <div class="food-card-body">
+            <div class="food-card-name">Roasted Squash Salad</div>
+            <div class="food-card-meta">320 kcal · High Fiber · ₱260</div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+              <span class="pill pill-olive">Grounding</span>
+              <span class="pill pill-muted">Vegan</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="food-card">
+          <div class="food-card-img">
+            <img src="https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=400&auto=format&fit=crop"
+              alt="Herbal Noodle Soup" />
+            <div class="food-card-hover">
+              <button class="food-card-action fca-recipe"><span class="material-symbols-outlined"
+                  style="font-size:20px;">menu_book</span></button>
+              <button class="food-card-action fca-cart"><span class="material-symbols-outlined"
+                  style="font-size:20px;">shopping_cart</span></button>
+            </div>
+          </div>
+          <div class="food-card-body">
+            <div class="food-card-name">Herbal Noodle Soup</div>
+            <div class="food-card-meta">280 kcal · Anti-Inflammatory · ₱380</div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+              <span class="pill pill-olive">Comfort</span>
+              <span class="pill pill-muted">Gluten-Free</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="food-card">
+          <div class="food-card-img">
+            <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400&auto=format&fit=crop"
+              alt="Zen Avocado Toast" />
+            <div class="food-card-hover">
+              <button class="food-card-action fca-recipe"><span class="material-symbols-outlined"
+                  style="font-size:20px;">menu_book</span></button>
+              <button class="food-card-action fca-cart"><span class="material-symbols-outlined"
+                  style="font-size:20px;">shopping_cart</span></button>
+            </div>
+          </div>
+          <div class="food-card-body">
+            <div class="food-card-name">Zen Avocado Toast</div>
+            <div class="food-card-meta">380 kcal · High Protein · ₱280</div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+              <span class="pill pill-olive">Energy</span>
+              <span class="pill pill-muted">Organic</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="food-card">
+          <div class="food-card-img">
+            <img src="https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400&auto=format&fit=crop"
+              alt="Berry Smoothie Bowl" />
+            <div class="food-card-hover">
+              <button class="food-card-action fca-recipe"><span class="material-symbols-outlined"
+                  style="font-size:20px;">menu_book</span></button>
+              <button class="food-card-action fca-cart"><span class="material-symbols-outlined"
+                  style="font-size:20px;">shopping_cart</span></button>
+            </div>
+          </div>
+          <div class="food-card-body">
+            <div class="food-card-name">Berry Smoothie Bowl</div>
+            <div class="food-card-meta">340 kcal · Antioxidants · ₱240</div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+              <span class="pill pill-olive">Fresh</span>
+              <span class="pill pill-muted">Vegan</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="food-card">
+          <div class="food-card-img">
+            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&auto=format&fit=crop"
+              alt="Chicken Teriyaki Bowl" />
+            <div class="food-card-hover">
+              <button class="food-card-action fca-recipe"><span class="material-symbols-outlined"
+                  style="font-size:20px;">menu_book</span></button>
+              <button class="food-card-action fca-cart"><span class="material-symbols-outlined"
+                  style="font-size:20px;">shopping_cart</span></button>
+            </div>
+          </div>
+          <div class="food-card-body">
+            <div class="food-card-name">Chicken Teriyaki Bowl</div>
+            <div class="food-card-meta">520 kcal · High Protein · ₱320</div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+              <span class="pill pill-olive">Balanced</span>
+              <span class="pill pill-muted">Comfort</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="slider-dots" id="sliderDots"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+     DELIVERY TRACKING  (Leaflet map)
+════════════════════════════════════════════════════════════ -->
+  <section id="tracking" class="section section-alt">
+    <div class="container">
+      <div class="two-col">
+        <!-- Map side -->
+        <div>
+          <div class="tracking-card">
+            <div id="delivery-map"></div>
+            <div class="tracking-status">
+              <div>
+                <div class="ts-label">Estimated Arrival</div>
+                <div class="ts-value" id="etaDisplay">10 mins</div>
+              </div>
+              <div class="ts-status">
+                <div class="ts-label">Status</div>
+                <div class="ts-value">On the way 🛵</div>
+              </div>
+            </div>
+            <!-- Step progress -->
+            <div class="tracking-steps" style="margin-top:1.25rem;">
+              <div class="tracking-step done">
+                <div class="step-dot"></div>
+                <span>Order confirmed & preparing</span>
+              </div>
+              <div class="tracking-step active">
+                <div class="step-dot"></div>
+                <span>Rider picked up your order</span>
+              </div>
+              <div class="tracking-step">
+                <div class="step-dot"></div>
+                <span>Delivered to your door</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Text side -->
+        <div>
+          <span class="section-tag">Real-time tracking</span>
+          <h2 class="section-title">Follow your meal's journey, live.</h2>
+          <p class="section-desc">
+            From the moment the chef starts cooking to the second your rider turns the corner — you see every step.
+            Powered by OpenStreetMap via Leaflet.
+          </p>
+          <ul class="check-list">
+            <li>Live rider position updated every second</li>
+            <li>Accurate ETA with real-world routing</li>
+            <li>Eco-friendly, local delivery partners</li>
+            <li>In-app notifications at every milestone</li>
+            <li>Cancel anytime before pickup</li>
+          </ul>
+          <div style="margin-top:2rem;">
+            <a href="#moods" class="btn btn-primary">Order Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+     WELLNESS
+════════════════════════════════════════════════════════════ -->
+  <section id="wellness" class="section">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <span class="section-tag">Your wellness</span>
+        <h2 class="section-title">Health at a Glance</h2>
+        <p class="section-desc" style="max-width:500px;margin:0 auto;">
+          Holistic data to help you understand the food-mood connection every single day.
+        </p>
+      </div>
+      <div class="wellness-grid">
+        <!-- Mood score -->
+        <div class="wellness-card wc-olive">
+          <div>
+            <div class="wc-title">Weekly Mood Score</div>
+            <div class="wc-value">7.8</div>
+          </div>
+          <div>
+            <div class="mini-bars">
+              <div class="mini-bar" style="height:50%"></div>
+              <div class="mini-bar" style="height:70%"></div>
+              <div class="mini-bar" style="height:40%"></div>
+              <div class="mini-bar" style="height:100%;background:white;opacity:.9"></div>
+              <div class="mini-bar" style="height:75%"></div>
+              <div class="mini-bar" style="height:55%"></div>
+              <div class="mini-bar" style="height:80%"></div>
+            </div>
+          </div>
+          <div class="wc-bg-icon material-symbols-outlined">mood</div>
+        </div>
+        <!-- Steps -->
+        <div class="wellness-card wc-cream">
+          <div>
+            <div class="wc-title" style="color:var(--text-muted);">Today's Steps</div>
+            <div class="wc-value" style="color:var(--olive);">5,400</div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:.4rem;">
+              <span style="font-size:.75rem;color:var(--text-muted);">Goal: 10,000</span>
+              <span style="font-size:.75rem;font-weight:700;color:var(--olive);">54%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:54%"></div>
+            </div>
+          </div>
+          <div class="wc-bg-icon material-symbols-outlined" style="color:var(--cream-dark)">directions_walk</div>
+        </div>
+        <!-- Calories -->
+        <div class="wellness-card wc-cream">
+          <div>
+            <div class="wc-title" style="color:var(--text-muted);">Calories Today</div>
+            <div class="wc-value" style="color:var(--olive);">1,250</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.5rem;">
+            <span class="material-symbols-outlined" style="color:var(--olive);font-size:1.1rem;">nutrition</span>
+            <span style="font-size:.85rem;color:var(--text-muted);">Within your daily target</span>
+          </div>
+          <div class="wc-bg-icon material-symbols-outlined" style="color:var(--cream-dark)">local_fire_department</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+     FEATURES
+════════════════════════════════════════════════════════════ -->
+  <section class="section section-alt">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <span class="section-tag">Why MoodBite</span>
+        <h2 class="section-title">Built around how you feel</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><span class="material-symbols-outlined">psychology</span></div>
+          <div class="feature-title">Mood-based Suggestions</div>
+          <p class="feature-desc">Our AI learns how different ingredients impact your serotonin and dopamine levels —
+            recommending meals that genuinely lift your mood.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><span class="material-symbols-outlined">favorite</span></div>
+          <div class="feature-title">Dietary Preferences</div>
+          <p class="feature-desc">Filter by allergies, lifestyle goals, and dietary categories — Keto, Vegan,
+            Gluten-Free, Brain Food and more — with a single tap.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><span class="material-symbols-outlined">delivery_dining</span></div>
+          <div class="feature-title">Live Order Tracking</div>
+          <p class="feature-desc">Follow your rider's exact position on a live OpenStreetMap — from kitchen to doorstep,
+            every metre of the journey visible.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+     TEAM
+════════════════════════════════════════════════════════════ -->
+  <section id="team" class="section">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:3.5rem;">
+        <span class="section-tag">The team</span>
+        <h2 class="section-title">Minds Behind MoodBite</h2>
+        <p class="section-desc" style="max-width:440px;margin:0 auto;">
+          A team of programmers, designers, and foodies from DNSC.
+        </p>
+      </div>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar-wrap">
+            <img
+              src="images\jjc.png"
+              alt="Jevie John" />
+          </div>
+          <div class="team-name">Jevie John V. Calderon</div>
+          <div class="team-role">CEO / Documentarian</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar-wrap">
+            <img
+              src="images\adf.png"
+              alt="Austin Dave" />
+          </div>
+          <div class="team-name">Austin Dave T. Feguro</div>
+          <div class="team-role">CTO / Programmer</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar-wrap">
+            <img
+              src="images\kec.png"
+              alt="Kent Erwin" />
+          </div>
+          <div class="team-name">Kent Erwin D. Camiling</div>
+          <div class="team-role">COO / Project Manager</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+     CTA
+════════════════════════════════════════════════════════════ -->
+  <section class="cta-section">
+    <div class="cta-blob" style="top:-120px;left:-120px;"></div>
+    <div class="cta-blob" style="bottom:-120px;right:-120px;"></div>
+    <div style="position:relative;z-index:1;">
+      <span class="section-tag" style="color:var(--olive-muted);">Start today</span>
+      <h2 class="cta-title">Ready to transform your relationship with food?</h2>
+      <p class="cta-desc">Join thousands of users who are finding their zen through better eating habits.</p>
+      <a href="#moods" class="btn btn-primary" style="font-size:1.1rem;padding:1.1rem 3.5rem;">
+        Get Recommendations
+      </a>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo"><img src="images/logomood1.png" alt=""> MOODBITE</div>
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Support</a>
+        <a href="#">Instagram</a>
+      </div>
+      <p class="footer-copy">© 2025 MoodBite · Crafted for serenity.</p>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════════════════════ -->
+  <script>
+    /* ─── Mood selection ──────────────────────────────────────── */
+    function selectMood(el) {
+      document.querySelectorAll('.mood-card').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    /* ─── Food slider ─────────────────────────────────────────── */
+    const track = document.getElementById('sliderTrack');
+    const dotsWrap = document.getElementById('sliderDots');
+    const cards = track.querySelectorAll('.food-card');
+    const perPage = window.innerWidth < 640 ? 1 : window.innerWidth < 1024 ? 2 : 3;
+    const totalPg = Math.ceil(cards.length / perPage);
+    let activePg = 0;
+
+    // Build dots
+    for (let i = 0; i < totalPg; i++) {
+      const d = document.createElement('button');
+      d.className = 'slider-dot' + (i === 0 ? ' active' : '');
+      d.onclick = () => gotoPage(i);
+      dotsWrap.appendChild(d);
+    }
+
+    function gotoPage(p) {
+      p = Math.max(0, Math.min(p, totalPg - 1));
+      const idx = p * perPage;
+      const card = cards[idx];
+      if (!card) return;
+      track.scrollTo({ left: card.offsetLeft - 32, behavior: 'smooth' });
+      activePg = p;
+      dotsWrap.querySelectorAll('.slider-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === activePg);
+      });
+    }
+
+    function sliderNext() { gotoPage(activePg + 1); }
+    function sliderPrev() { gotoPage(activePg - 1); }
+
+    track.addEventListener('scroll', () => {
+      const mid = track.scrollLeft + track.offsetWidth / 2;
+      let best = 0, bestDiff = Infinity;
+      cards.forEach((c, i) => {
+        const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
+        if (d < bestDiff) { bestDiff = d; best = Math.floor(i / perPage); }
+      });
+      if (best !== activePg) {
+        activePg = best;
+        dotsWrap.querySelectorAll('.slider-dot').forEach((d, i) =>
+          d.classList.toggle('active', i === activePg));
+      }
+    });
+
+    /* ─── Leaflet delivery map ────────────────────────────────── */
+    // Panabo City, Davao del Norte coordinates
+    const kitchenPos = [7.3150, 125.6950];
+    const destPos = [7.3065, 125.6883];
+
+    const map = L.map('delivery-map', {
+      center: [7.311, 125.692],
+      zoom: 14,
+      zoomControl: true,
+      scrollWheelZoom: false,
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>',
+      maxZoom: 19,
+    }).addTo(map);
+
+    // Kitchen marker
+    const kitchenIcon = L.divIcon({
+      html: '<div style="font-size:26px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))">🍳</div>',
+      className: '', iconAnchor: [13, 13],
+    });
+    L.marker(kitchenPos, { icon: kitchenIcon })
+      .addTo(map)
+      .bindPopup('<b style="font-family:Inter,sans-serif;color:#6B7A3A">MoodBite Kitchen</b><br><small>Your order is being prepared</small>');
+
+    // Destination marker
+    const destIcon = L.divIcon({
+      html: '<div style="font-size:26px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))">📍</div>',
+      className: '', iconAnchor: [13, 26],
+    });
+    L.marker(destPos, { icon: destIcon })
+      .addTo(map)
+      .bindPopup('<b style="font-family:Inter,sans-serif;color:#6B7A3A">Your Location</b>');
+
+    // Route polyline
+    const routeLine = L.polyline([kitchenPos, destPos], {
+      color: '#6B7A3A', weight: 3, opacity: .7, dashArray: '8 6',
+    }).addTo(map);
+
+    // Rider marker (animated)
+    const riderIcon = L.divIcon({
+      html: '<div style="font-size:28px;line-height:1;filter:drop-shadow(0 3px 8px rgba(107,122,58,.6))">🛵</div>',
+      className: '', iconAnchor: [14, 14],
+    });
+    let riderMarker = L.marker(kitchenPos, { icon: riderIcon }).addTo(map);
+
+    // Animate rider from kitchen → destination
+    let step = 0;
+    const totalSteps = 200;
+    let eta = 10;
+
+    function animateRider() {
+      step = (step + 1) % (totalSteps + 80); // pause at end before restart
+      if (step > totalSteps) { step = 0; eta = 10; }
+
+      const t = step / totalSteps;
+      const ease = t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // ease-in-out
+      const lat = kitchenPos[0] + (destPos[0] - kitchenPos[0]) * ease;
+      const lng = kitchenPos[1] + (destPos[1] - kitchenPos[1]) * ease;
+
+      riderMarker.setLatLng([lat, lng]);
+      eta = Math.max(0, Math.round(10 * (1 - ease)));
+      document.getElementById('etaDisplay').textContent =
+        eta > 0 ? eta + ' mins' : 'Arriving! 🎉';
+    }
+
+    setInterval(animateRider, 80);
+
+    // Fit map to markers
+    map.fitBounds([kitchenPos, destPos], { padding: [40, 40] });
+
+    /* ─── Active nav on scroll ───────────────────────────────── */
+    const sections = document.querySelectorAll('section[id]');
+    const navAnchors = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (scrollY >= s.offsetTop - 120) current = s.id;
+      });
+      navAnchors.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+      });
+    }, { passive: true });
+  </script>
+</body>
+
+</html>
