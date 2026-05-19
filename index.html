@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>MoodBite — Eat what you need</title>
+  <link rel="icon" type="image/png" href="images/logomood1.png" />
 
   <!-- Fonts: Cormorant Garamond (headings) + Inter (body) — exact match to mobile app -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1082,347 +1083,668 @@
       font-size: 22px;
       line-height: 1;
     }
-    .nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 28px;
-  font-weight: bold;
-}
 
-.nav-logo img {
-  width: 55px;   /* adjust size here */
-  height: 55px;
-  object-fit: contain;
-}
-/* ══════════════════════════════════════════════════════════
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .nav-logo img {
+      width: 55px;
+      /* adjust size here */
+      height: 55px;
+      object-fit: contain;
+    }
+
+    /* ══════════════════════════════════════════════════════════
    RESPONSIVE DESIGN + WELLNESS HOVER EFFECTS
    READY TO PASTE
 ══════════════════════════════════════════════════════════ */
 
-/* ─── NAV LOGO ───────────────────────────── */
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: clamp(1.2rem, 2vw, 1.8rem);
-  font-weight: 700;
-  color: var(--olive);
-  flex-shrink: 0;
-}
+    /* ─── NAV LOGO ───────────────────────────── */
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      font-weight: 700;
+      color: var(--olive);
+      flex-shrink: 0;
+    }
 
-.nav-logo img {
-  width: clamp(42px, 5vw, 60px);
-  height: clamp(42px, 5vw, 60px);
-  object-fit: contain;
-  display: block;
-}
-.footer-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: clamp(1.2rem, 2vw, 1.8rem);
-  font-weight: 700;
-  color: var(--olive);
-  flex-shrink: 0;
-}
+    .nav-logo img {
+      width: clamp(42px, 5vw, 60px);
+      height: clamp(42px, 5vw, 60px);
+      object-fit: contain;
+      display: block;
+    }
 
-.footer-logo img {
-  width: clamp(42px, 5vw, 60px);
-  height: clamp(42px, 5vw, 60px);
-  object-fit: contain;
-  display: block;
-}
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      font-weight: 700;
+      color: var(--olive);
+      flex-shrink: 0;
+    }
+
+    .footer-logo img {
+      width: clamp(42px, 5vw, 60px);
+      height: clamp(42px, 5vw, 60px);
+      object-fit: contain;
+      display: block;
+    }
 
 
-/* ─────────────────────────────────────────────
+    /* ─────────────────────────────────────────────
    WELLNESS CARDS — CONSISTENT ACTIVE HOVER
 ───────────────────────────────────────────── */
 
-.wellness-card {
-  background: white;
-  color: var(--text-primary);
-  border: 2px solid transparent;
-  transition:
-    transform 0.35s ease,
-    background 0.35s ease,
-    color 0.35s ease,
-    box-shadow 0.35s ease,
-    border-color 0.35s ease;
-  cursor: pointer;
-}
+    .wellness-card {
+      background: white;
+      color: var(--text-primary);
+      border: 2px solid transparent;
+      transition:
+        transform 0.35s ease,
+        background 0.35s ease,
+        color 0.35s ease,
+        box-shadow 0.35s ease,
+        border-color 0.35s ease;
+      cursor: pointer;
+    }
 
-/* DEFAULT WHITE STATE */
-.wc-olive,
-.wc-cream {
-  background: white;
-  color: var(--text-primary);
-}
+    /* DEFAULT WHITE STATE */
+    .wc-olive,
+    .wc-cream {
+      background: white;
+      color: var(--text-primary);
+    }
 
-/* DEFAULT ICON COLOR */
-.wellness-card .wc-bg-icon {
-  color: rgba(107, 122, 58, 0.12);
-  transition: all 0.35s ease;
-}
+    /* DEFAULT ICON COLOR */
+    .wellness-card .wc-bg-icon {
+      color: rgba(107, 122, 58, 0.12);
+      transition: all 0.35s ease;
+    }
 
-/* DEFAULT VALUE COLOR */
-.wellness-card .wc-value {
-  color: var(--olive);
-  transition: all 0.35s ease;
-}
+    /* DEFAULT VALUE COLOR */
+    .wellness-card .wc-value {
+      color: var(--olive);
+      transition: all 0.35s ease;
+    }
 
-/* DEFAULT TITLE COLOR */
-.wellness-card .wc-title {
-  color: var(--text-muted);
-  transition: color 0.35s ease;
-}
+    /* DEFAULT TITLE COLOR */
+    .wellness-card .wc-title {
+      color: var(--text-muted);
+      transition: color 0.35s ease;
+    }
 
-/* ACTIVE HOVER STATE */
-.wellness-card:hover {
-  background: var(--olive);
-  color: white;
-  border-color: var(--olive);
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 20px 45px rgba(107, 122, 58, 0.28);
-}
+    /* ACTIVE HOVER STATE */
+    .wellness-card:hover {
+      background: var(--olive);
+      color: white;
+      border-color: var(--olive);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 45px rgba(107, 122, 58, 0.28);
+    }
 
-/* TEXTS TURN WHITE */
-.wellness-card:hover .wc-title,
-.wellness-card:hover .wc-value,
-.wellness-card:hover span,
-.wellness-card:hover div {
-  color: white !important;
-}
+    /* TEXTS TURN WHITE */
+    .wellness-card:hover .wc-title,
+    .wellness-card:hover .wc-value,
+    .wellness-card:hover span,
+    .wellness-card:hover div {
+      color: white !important;
+    }
 
-/* ICON ANIMATION */
-.wellness-card:hover .wc-bg-icon {
-  color: rgba(255, 255, 255, 0.12) !important;
-  transform: scale(1.15) rotate(8deg);
-}
+    /* ICON ANIMATION */
+    .wellness-card:hover .wc-bg-icon {
+      color: rgba(255, 255, 255, 0.12) !important;
+      transform: scale(1.15) rotate(8deg);
+    }
 
-/* PROGRESS BAR */
-.wellness-card:hover .progress-bar {
-  background: rgba(255, 255, 255, 0.2);
-}
+    /* PROGRESS BAR */
+    .wellness-card:hover .progress-bar {
+      background: rgba(255, 255, 255, 0.2);
+    }
 
-.wellness-card:hover .progress-fill {
-  background: white;
-}
+    .wellness-card:hover .progress-fill {
+      background: white;
+    }
 
-/* MINI BARS */
-.wellness-card:hover .mini-bar {
-  background: rgba(255, 255, 255, 0.35);
-}
+    /* MINI BARS */
+    .wellness-card:hover .mini-bar {
+      background: rgba(255, 255, 255, 0.35);
+    }
 
-.wellness-card:hover .mini-bar:nth-child(4) {
-  background: white;
-}
+    .wellness-card:hover .mini-bar:nth-child(4) {
+      background: white;
+    }
 
-/* ─── GENERAL RESPONSIVE FIXES ───────────── */
-img {
-  max-width: 100%;
-}
+    /* ─── GENERAL RESPONSIVE FIXES ───────────── */
+    img {
+      max-width: 100%;
+    }
 
-/* ─── TABLET RESPONSIVE ──────────────────── */
-@media (max-width: 1024px) {
+    /* ─── TABLET RESPONSIVE ──────────────────── */
+    @media (max-width: 1024px) {
 
-  .container {
-    padding: 0 1.5rem;
-  }
+      .container {
+        padding: 0 1.5rem;
+      }
 
-  .hero-grid,
-  .two-col,
-  .features-grid,
-  .wellness-grid,
-  .team-grid {
-    gap: 2rem;
-  }
+      .hero-grid,
+      .two-col,
+      .features-grid,
+      .wellness-grid,
+      .team-grid {
+        gap: 2rem;
+      }
 
-  .food-card {
-    min-width: 280px;
-  }
-}
+      .food-card {
+        min-width: 280px;
+      }
+    }
 
-/* ─── MOBILE RESPONSIVE ──────────────────── */
-@media (max-width: 768px) {
+    /* ─── MOBILE RESPONSIVE ──────────────────── */
+    @media (max-width: 768px) {
 
-  /* NAV */
-  .nav-inner {
-    padding: 1rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
+      /* NAV */
+      .nav-inner {
+        padding: 1rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
 
-  .nav-links {
-    display: none;
-  }
+      .nav-links {
+        display: none;
+      }
 
-  .btn-sm {
-    padding: 0.7rem 1rem;
-    font-size: 0.75rem;
-  }
+      .btn-sm {
+        padding: 0.7rem 1rem;
+        font-size: 0.75rem;
+      }
 
-  /* HERO */
-  #hero {
-    min-height: auto;
-    padding: 4rem 0;
-  }
+      /* HERO */
+      #hero {
+        min-height: auto;
+        padding: 4rem 0;
+      }
 
-  .hero-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 3rem;
-  }
+      .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 3rem;
+      }
 
-  .hero-desc {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 100%;
-  }
+      .hero-desc {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+      }
 
-  .hero-btns {
-    justify-content: center;
-  }
+      .hero-btns {
+        justify-content: center;
+      }
 
-  .hero-title {
-    font-size: 3rem;
-  }
+      .hero-title {
+        font-size: 3rem;
+      }
 
-  /* PHONE */
-  .phone {
-    width: 220px;
-    height: 460px;
-  }
+      /* PHONE */
+      .phone {
+        width: 220px;
+        height: 460px;
+      }
 
-  /* MOOD GRID */
-  .mood-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+      /* MOOD GRID */
+      .mood-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
 
-  /* FEATURES */
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
+      /* FEATURES */
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
 
-  /* WELLNESS */
-  .wellness-grid {
-    grid-template-columns: 1fr;
-  }
+      /* WELLNESS */
+      .wellness-grid {
+        grid-template-columns: 1fr;
+      }
 
-  .wellness-card {
-    min-height: 200px;
-  }
+      .wellness-card {
+        min-height: 200px;
+      }
 
-  .wc-value {
-    font-size: 2.8rem;
-  }
+      .wc-value {
+        font-size: 2.8rem;
+      }
 
-  /* TEAM */
-  .team-grid {
-    grid-template-columns: 1fr;
-  }
+      /* TEAM */
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
 
-  .team-avatar-wrap {
-    width: 120px;
-    height: 120px;
-  }
+      .team-avatar-wrap {
+        width: 120px;
+        height: 120px;
+      }
 
-  /* TWO COLUMN */
-  .two-col {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
+      /* TWO COLUMN */
+      .two-col {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
 
-  /* MAP */
-  #delivery-map {
-    height: 300px;
-  }
+      /* MAP */
+      #delivery-map {
+        height: 300px;
+      }
 
-  /* CTA */
-  .cta-section {
-    padding: 4rem 1.5rem;
-  }
+      /* CTA */
+      .cta-section {
+        padding: 4rem 1.5rem;
+      }
 
-  /* FOOTER */
-  .footer-inner {
-    flex-direction: column;
-    text-align: center;
-  }
+      /* FOOTER */
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
 
-  .footer-links {
-    justify-content: center;
-  }
-}
+      .footer-links {
+        justify-content: center;
+      }
+    }
 
-/* ─── SMALL MOBILE ───────────────────────── */
-@media (max-width: 480px) {
+    /* ─── SMALL MOBILE ───────────────────────── */
+    @media (max-width: 480px) {
 
-  .container {
-    padding: 0 1rem;
-  }
+      .container {
+        padding: 0 1rem;
+      }
 
-  .section {
-    padding: 4rem 0;
-  }
+      .section {
+        padding: 4rem 0;
+      }
 
-  .hero-title {
-    font-size: 2.4rem;
-    line-height: 1.1;
-  }
+      .hero-title {
+        font-size: 2.4rem;
+        line-height: 1.1;
+      }
 
-  .hero-desc {
-    font-size: 0.95rem;
-  }
+      .hero-desc {
+        font-size: 0.95rem;
+      }
 
-  .phone {
-    width: 190px;
-    height: 400px;
-  }
+      .phone {
+        width: 190px;
+        height: 400px;
+      }
 
-  .food-card {
-    min-width: 88%;
-  }
+      .food-card {
+        min-width: 88%;
+      }
 
-  .food-card img {
-    height: 180px;
-  }
+      .food-card img {
+        height: 180px;
+      }
 
-  .section-title {
-    font-size: 2rem;
-  }
+      .section-title {
+        font-size: 2rem;
+      }
 
-  .wc-value {
-    font-size: 2.2rem;
-  }
+      .wc-value {
+        font-size: 2.2rem;
+      }
 
-  .feature-card,
-  .tracking-card,
-  .wellness-card {
-    padding: 1.5rem;
-  }
+      .feature-card,
+      .tracking-card,
+      .wellness-card {
+        padding: 1.5rem;
+      }
 
-  .mood-card {
-    padding: 1.5rem 0.75rem;
-  }
+      .mood-card {
+        padding: 1.5rem 0.75rem;
+      }
 
-  .mood-card .emoji {
-    font-size: 2rem;
-  }
+      .mood-card .emoji {
+        font-size: 2rem;
+      }
 
-  .tracking-status {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
+      .tracking-status {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
 
-  .ts-status {
-    text-align: left;
-  }
+      .ts-status {
+        text-align: left;
+      }
 
-  .footer-links {
-    gap: 1rem;
-  }
-}
+      .footer-links {
+        gap: 1rem;
+      }
+    }
+
+    /* ─── Food Detail Modal ────────────────────────────────────────────────── */
+    .food-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 31, 14, 0.65);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+
+    .food-modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .food-modal {
+      background: var(--cream);
+      width: 100%;
+      max-width: 560px;
+      max-height: 92vh;
+      border-radius: 32px 32px 0 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(60px);
+      transition: transform .4s cubic-bezier(.16, 1, .3, 1);
+      box-shadow: 0 -20px 60px rgba(0, 0, 0, .2);
+    }
+
+    @media(min-width:640px) {
+      .food-modal-overlay {
+        align-items: center;
+      }
+
+      .food-modal {
+        border-radius: 32px;
+        max-height: 88vh;
+        transform: translateY(30px) scale(.96);
+      }
+    }
+
+    .food-modal-overlay.open .food-modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .food-modal-img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .food-modal-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .food-modal-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26, 31, 14, .6) 0%, transparent 60%);
+    }
+
+    .food-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(242, 242, 230, .9);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      font-size: 18px;
+      transition: background .2s;
+      z-index: 2;
+    }
+
+    .food-modal-close:hover {
+      background: white;
+    }
+
+    .food-modal-body {
+      padding: 1.75rem 1.75rem 0;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .food-modal-body::-webkit-scrollbar {
+      display: none;
+    }
+
+    .food-modal-body {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .food-modal-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 1.1;
+      margin-bottom: .5rem;
+    }
+
+    .food-modal-meta {
+      font-size: .85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .food-modal-pills {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .food-modal-desc {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .food-modal-macros {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .macro-chip {
+      background: white;
+      border-radius: 16px;
+      padding: .75rem;
+      text-align: center;
+      border: 1px solid var(--cream-dark);
+    }
+
+    .macro-chip-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--olive);
+    }
+
+    .macro-chip-label {
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Cook it yourself section */
+    .cook-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--olive);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-family: 'Inter', sans-serif;
+      font-size: .95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      transition: background .2s, transform .2s;
+      margin-bottom: 1.25rem;
+    }
+
+    .cook-btn:hover {
+      background: var(--olive-light);
+      transform: translateY(-1px);
+    }
+
+    .cook-btn .cook-icon {
+      font-size: 1.2rem;
+      transition: transform .3s;
+    }
+
+    .cook-btn.expanded .cook-icon {
+      transform: rotate(90deg);
+    }
+
+    .recipe-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .5s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .recipe-panel.open {
+      max-height: 1200px;
+    }
+
+    .recipe-section-title {
+      font-size: .65rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--olive);
+      margin-bottom: .75rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .recipe-section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(107, 122, 58, .2);
+    }
+
+    .ingredients-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .ingredient-item {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-size: .875rem;
+      padding: .6rem .75rem;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--cream-dark);
+    }
+
+    .ingredient-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--olive-muted);
+      flex-shrink: 0;
+    }
+
+    .ingredient-qty {
+      font-weight: 700;
+      color: var(--olive);
+      min-width: 60px;
+    }
+
+    .ingredient-name {
+      color: var(--text-primary);
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      margin-bottom: 2rem;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--olive);
+      color: white;
+      font-size: .75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-text {
+      font-size: .875rem;
+      color: var(--text-primary);
+      line-height: 1.65;
+      padding-top: 3px;
+    }
+
+    .food-modal-footer {
+      padding: 1.25rem 1.75rem 1.75rem;
+      display: flex;
+      gap: .75rem;
+      border-top: 1px solid var(--cream-dark);
+      background: var(--cream);
+      position: sticky;
+      bottom: 0;
+      flex-shrink: 0;
+    }
+
+    .food-modal-footer .btn {
+      flex: 1;
+    }
   </style>
 </head>
 
@@ -1912,27 +2234,21 @@ img {
       <div class="team-grid">
         <div class="team-card">
           <div class="team-avatar-wrap">
-            <img
-              src="images\jjc.png"
-              alt="Jevie John" />
+            <img src="images\jjc.png" alt="Jevie John" />
           </div>
           <div class="team-name">Jevie John V. Calderon</div>
           <div class="team-role">CEO / Documentarian</div>
         </div>
         <div class="team-card">
           <div class="team-avatar-wrap">
-            <img
-              src="images\adf.png"
-              alt="Austin Dave" />
+            <img src="images\adf.png" alt="Austin Dave" />
           </div>
           <div class="team-name">Austin Dave T. Feguro</div>
           <div class="team-role">CTO / Programmer</div>
         </div>
         <div class="team-card">
           <div class="team-avatar-wrap">
-            <img
-              src="images\kec.png"
-              alt="Kent Erwin" />
+            <img src="images\kec.png" alt="Kent Erwin" />
           </div>
           <div class="team-name">Kent Erwin D. Camiling</div>
           <div class="team-role">COO / Project Manager</div>
@@ -1972,6 +2288,58 @@ img {
       <p class="footer-copy">© 2025 MoodBite · Crafted for serenity.</p>
     </div>
   </footer>
+
+  <!-- ══════════════════════════════════════════════════════════
+     FOOD DETAIL MODAL
+════════════════════════════════════════════════════════════ -->
+  <div class="food-modal-overlay" id="foodModal" onclick="closeFoodModal(event)">
+    <div class="food-modal" role="dialog" aria-modal="true">
+      <!-- Image -->
+      <div class="food-modal-img" id="modalImgWrap">
+        <img id="modalImg" src="" alt="" />
+        <div class="food-modal-img-overlay"></div>
+        <button class="food-modal-close" onclick="closeFoodModalDirect()" aria-label="Close">
+          <span class="material-symbols-outlined" style="font-size:20px;">close</span>
+        </button>
+      </div>
+
+      <!-- Scrollable body -->
+      <div class="food-modal-body">
+        <h2 class="food-modal-name" id="modalName"></h2>
+        <div class="food-modal-meta" id="modalMeta"></div>
+        <div class="food-modal-pills" id="modalPills"></div>
+        <p class="food-modal-desc" id="modalDesc"></p>
+
+        <!-- Macros row -->
+        <div class="food-modal-macros" id="modalMacros"></div>
+
+        <!-- Cook It Yourself toggle -->
+        <button class="cook-btn" id="cookBtn" onclick="toggleRecipe()">
+          <span class="material-symbols-outlined cook-icon">outdoor_grill</span>
+          Cook It Yourself
+          <span class="material-symbols-outlined" style="font-size:18px;margin-left:auto;transition:transform .3s"
+            id="cookChevron">expand_more</span>
+        </button>
+
+        <!-- Recipe panel -->
+        <div class="recipe-panel" id="recipePanel">
+          <div class="recipe-section-title">Ingredients</div>
+          <ul class="ingredients-list" id="ingredientsList"></ul>
+          <div class="recipe-section-title">Steps</div>
+          <div class="steps-list" id="stepsList"></div>
+        </div>
+      </div>
+
+      <!-- Footer actions -->
+      <div class="food-modal-footer">
+        <a href="#tracking" class="btn btn-primary" style="width:100%;justify-content:center;"
+          onclick="closeFoodModalDirect()">
+          <span class="material-symbols-outlined" style="font-size:16px;">shopping_cart</span>
+          Order Now · <span id="modalPrice"></span>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- ══════════════════════════════════════════════════════════
      SCRIPTS
@@ -2113,7 +2481,500 @@ img {
         a.classList.toggle('active', a.getAttribute('href') === '#' + current);
       });
     }, { passive: true });
+    /* ─── Food Detail Modal ──────────────────────────────────── */
+    const FOOD_DATA = {
+      "Miso Glazed Salmon": {
+        img: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800&auto=format&fit=crop",
+        meta: "450 kcal · High Omega-3 · ₱450",
+        pills: [{ label: "Calming", cls: "pill-olive" }, { label: "Healthy", cls: "pill-muted" }],
+        desc: "Rich in omega-3 fatty acids, this miso-glazed salmon is scientifically linked to reduced cortisol and elevated serotonin. The umami miso glaze adds a savory depth that feels like a warm hug for your nervous system.",
+        macros: [{ value: "42g", label: "Protein" }, { value: "18g", label: "Healthy Fats" }, { value: "12g", label: "Carbs" }],
+        price: "₱450",
+        ingredients: [
+          { qty: "200g", name: "Fresh salmon fillet" },
+          { qty: "2 tbsp", name: "White miso paste" },
+          { qty: "1 tbsp", name: "Mirin (sweet rice wine)" },
+          { qty: "1 tbsp", name: "Soy sauce" },
+          { qty: "1 tsp", name: "Sesame oil" },
+          { qty: "1 tsp", name: "Fresh ginger, grated" },
+          { qty: "1 tbsp", name: "Honey" },
+          { qty: "1 stalk", name: "Green onions, sliced" },
+          { qty: "1 tsp", name: "Sesame seeds" },
+        ],
+        steps: [
+          "Whisk together miso paste, mirin, soy sauce, sesame oil, ginger, and honey in a small bowl until smooth to form the glaze.",
+          "Pat the salmon dry with paper towels and coat all sides generously with the miso glaze. Let marinate for at least 20 minutes in the refrigerator.",
+          "Preheat your oven to 200°C (400°F) or heat an oven-safe skillet over medium-high heat with a light brush of oil.",
+          "Place salmon skin-side down. Sear for 2–3 minutes until the bottom is golden, then transfer to the oven.",
+          "Bake for 8–10 minutes until the glaze is caramelized and the salmon flakes easily with a fork.",
+          "Rest for 2 minutes, then garnish with sliced green onions and sesame seeds. Serve over steamed rice or sautéed greens.",
+        ]
+      },
+      "Roasted Squash Salad": {
+        img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&auto=format&fit=crop",
+        meta: "320 kcal · High Fiber · ₱260",
+        pills: [{ label: "Grounding", cls: "pill-olive" }, { label: "Vegan", cls: "pill-muted" }],
+        desc: "A beautifully grounding salad loaded with beta-carotene, folate, and gut-friendly fiber. Roasting the squash draws out its natural sweetness, and the lemon tahini dressing adds a mood-lifting brightness.",
+        macros: [{ value: "8g", label: "Protein" }, { value: "14g", label: "Healthy Fats" }, { value: "42g", label: "Carbs" }],
+        price: "₱260",
+        ingredients: [
+          { qty: "300g", name: "Butternut squash, cubed" },
+          { qty: "2 cups", name: "Mixed leafy greens" },
+          { qty: "¼ cup", name: "Pumpkin seeds (pepitas)" },
+          { qty: "¼ cup", name: "Dried cranberries" },
+          { qty: "2 tbsp", name: "Tahini" },
+          { qty: "1", name: "Lemon, juiced" },
+          { qty: "1 tbsp", name: "Olive oil + extra for roasting" },
+          { qty: "1 tsp", name: "Cumin" },
+          { qty: "Salt & pepper", name: "to taste" },
+        ],
+        steps: [
+          "Preheat oven to 200°C. Toss squash cubes with olive oil, cumin, salt and pepper. Spread on a baking tray.",
+          "Roast for 25–30 minutes, flipping halfway, until edges are golden and caramelized.",
+          "While squash roasts, whisk tahini, lemon juice, 1 tbsp olive oil, and a splash of water until a creamy dressing forms.",
+          "Toast pumpkin seeds in a dry pan over medium heat for 2–3 minutes until golden and fragrant.",
+          "Let squash cool slightly, then assemble: greens on a large plate, topped with warm squash, pumpkin seeds, and cranberries.",
+          "Drizzle tahini dressing generously and serve immediately.",
+        ]
+      },
+      "Herbal Noodle Soup": {
+        img: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=800&auto=format&fit=crop",
+        meta: "280 kcal · Anti-Inflammatory · ₱380",
+        pills: [{ label: "Comfort", cls: "pill-olive" }, { label: "Gluten-Free", cls: "pill-muted" }],
+        desc: "This healing herbal noodle soup is packed with anti-inflammatory turmeric, ginger, and lemongrass. A warm bowl resets the nervous system — proven by both traditional medicine and modern nutrition science.",
+        macros: [{ value: "12g", label: "Protein" }, { value: "6g", label: "Fats" }, { value: "38g", label: "Carbs" }],
+        price: "₱380",
+        ingredients: [
+          { qty: "100g", name: "Rice vermicelli noodles" },
+          { qty: "600ml", name: "Vegetable or chicken broth" },
+          { qty: "1 stalk", name: "Lemongrass, bruised" },
+          { qty: "1 inch", name: "Fresh ginger, sliced" },
+          { qty: "1 tsp", name: "Turmeric powder" },
+          { qty: "2 cloves", name: "Garlic, minced" },
+          { qty: "1 cup", name: "Baby bok choy or spinach" },
+          { qty: "2 tbsp", name: "Soy sauce or tamari" },
+          { qty: "Fresh cilantro & lime", name: "to serve" },
+        ],
+        steps: [
+          "In a medium pot, sauté garlic and ginger in a little oil for 1–2 minutes until fragrant.",
+          "Add broth, lemongrass, and turmeric. Bring to a simmer and let infuse for 10 minutes over low heat.",
+          "Meanwhile, soak rice vermicelli in hot water for 5 minutes or as per package instructions, then drain.",
+          "Remove lemongrass from the broth. Add soy sauce or tamari and adjust seasoning to taste.",
+          "Add bok choy or spinach and simmer for 2 more minutes until wilted.",
+          "Divide noodles into bowls, ladle hot broth and greens over them. Finish with fresh cilantro and a squeeze of lime.",
+        ]
+      },
+      "Zen Avocado Toast": {
+        img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&auto=format&fit=crop",
+        meta: "380 kcal · High Protein · ₱280",
+        pills: [{ label: "Energy", cls: "pill-olive" }, { label: "Organic", cls: "pill-muted" }],
+        desc: "Creamy avocado loaded with mood-boosting monounsaturated fats and B-vitamins, on toasted sourdough with a perfectly poached egg. This is the breakfast your brain needs to feel centered and sharp.",
+        macros: [{ value: "16g", label: "Protein" }, { value: "22g", label: "Healthy Fats" }, { value: "30g", label: "Carbs" }],
+        price: "₱280",
+        ingredients: [
+          { qty: "2 slices", name: "Sourdough or whole grain bread" },
+          { qty: "1 ripe", name: "Avocado" },
+          { qty: "2", name: "Eggs, poached" },
+          { qty: "1 tsp", name: "Lemon juice" },
+          { qty: "½ tsp", name: "Chili flakes" },
+          { qty: "Pinch", name: "Sea salt & cracked black pepper" },
+          { qty: "1 tsp", name: "Everything bagel seasoning (optional)" },
+          { qty: "Micro herbs", name: "or sprouts for garnish" },
+        ],
+        steps: [
+          "Toast bread slices to your preferred level of crispness.",
+          "While bread toasts, bring a pot of water to a gentle simmer. Add a splash of vinegar and swirl to create a vortex, then gently slide in eggs. Poach 3–4 minutes for runny yolks.",
+          "Halve and pit the avocado. Scoop flesh into a bowl, add lemon juice, salt, and pepper, and mash to your desired texture.",
+          "Spread avocado generously over each toast slice.",
+          "Top each slice with a poached egg. Season with chili flakes and everything bagel seasoning if using.",
+          "Garnish with micro herbs or sprouts. Serve immediately while still warm.",
+        ]
+      },
+      "Berry Smoothie Bowl": {
+        img: "https://images.unsplash.com/photo-1590301157890-4810ed352733?w=800&auto=format&fit=crop",
+        meta: "340 kcal · Antioxidants · ₱240",
+        pills: [{ label: "Fresh", cls: "pill-olive" }, { label: "Vegan", cls: "pill-muted" }],
+        desc: "A vibrant bowl of antioxidant-rich berries that flood your cells with dopamine precursors. Açaí, blueberries, and raspberries are your brain's best friends after a long, draining day.",
+        macros: [{ value: "6g", label: "Protein" }, { value: "10g", label: "Healthy Fats" }, { value: "55g", label: "Carbs" }],
+        price: "₱240",
+        ingredients: [
+          { qty: "1 packet", name: "Frozen açaí pulp (100g)" },
+          { qty: "½ cup", name: "Frozen blueberries" },
+          { qty: "½ cup", name: "Frozen raspberries" },
+          { qty: "1", name: "Frozen banana" },
+          { qty: "¼ cup", name: "Coconut milk or almond milk" },
+          { qty: "Toppings:", name: "granola, fresh berries, chia seeds, coconut flakes, honey" },
+        ],
+        steps: [
+          "Add frozen açaí, blueberries, raspberries, banana, and coconut milk to a high-speed blender.",
+          "Blend on high until completely smooth and thick — add as little liquid as possible so the bowl holds its shape.",
+          "The mixture should be thick like soft-serve ice cream. If too thin, add more frozen fruit.",
+          "Pour into a chilled bowl and smooth the surface with the back of a spoon.",
+          "Arrange toppings decoratively: granola in rows, fresh berries, a sprinkle of chia seeds, coconut flakes.",
+          "Drizzle lightly with honey and serve immediately before it melts.",
+        ]
+      },
+      "Chicken Teriyaki Bowl": {
+        img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop",
+        meta: "520 kcal · High Protein · ₱320",
+        pills: [{ label: "Balanced", cls: "pill-olive" }, { label: "Comfort", cls: "pill-muted" }],
+        desc: "A hearty, balanced teriyaki bowl that delivers a perfect ratio of complex carbs and complete proteins — the ultimate mood stabilizer. The homemade teriyaki sauce is deep, sweet, and satisfying in every single bite.",
+        macros: [{ value: "48g", label: "Protein" }, { value: "12g", label: "Fats" }, { value: "58g", label: "Carbs" }],
+        price: "₱320",
+        ingredients: [
+          { qty: "200g", name: "Chicken thigh or breast, sliced" },
+          { qty: "1 cup", name: "Japanese short-grain rice" },
+          { qty: "3 tbsp", name: "Soy sauce" },
+          { qty: "2 tbsp", name: "Mirin" },
+          { qty: "1 tbsp", name: "Sake or dry sherry" },
+          { qty: "1 tbsp", name: "Brown sugar or honey" },
+          { qty: "1 tsp", name: "Cornstarch mixed with 1 tsp water" },
+          { qty: "1 cup", name: "Steamed broccoli or edamame" },
+          { qty: "Sesame seeds & nori", name: "for garnish" },
+        ],
+        steps: [
+          "Cook rice according to package instructions. Keep warm.",
+          "Mix soy sauce, mirin, sake, and sugar in a small bowl. Heat in a small saucepan until sugar dissolves, then stir in cornstarch mixture and simmer until slightly thickened.",
+          "Season chicken lightly with salt and pepper. Heat oil in a skillet over medium-high heat.",
+          "Cook chicken for 4–5 minutes per side until golden brown and cooked through. Pour teriyaki sauce over chicken in the final minute and let it caramelize.",
+          "Steam or blanch broccoli until tender-crisp, about 3–4 minutes.",
+          "Assemble: rice in a bowl, sliced teriyaki chicken on top, vegetables on the side. Drizzle with extra sauce. Garnish with sesame seeds and nori strips.",
+        ]
+      }
+    };
+
+    let recipeOpen = false;
+
+    function openFoodModal(name) {
+      const data = FOOD_DATA[name];
+      if (!data) return;
+
+      // Populate
+      document.getElementById('modalImg').src = data.img;
+      document.getElementById('modalImg').alt = name;
+      document.getElementById('modalName').textContent = name;
+      document.getElementById('modalMeta').textContent = data.meta;
+      document.getElementById('modalPrice').textContent = data.price;
+      document.getElementById('modalDesc').textContent = data.desc;
+
+      // Pills
+      const pillsEl = document.getElementById('modalPills');
+      pillsEl.innerHTML = data.pills.map(p =>
+        `<span class="pill ${p.cls}">${p.label}</span>`
+      ).join('');
+
+      // Macros
+      const macrosEl = document.getElementById('modalMacros');
+      macrosEl.innerHTML = data.macros.map(m =>
+        `<div class="macro-chip">
+          <div class="macro-chip-value">${m.value}</div>
+          <div class="macro-chip-label">${m.label}</div>
+        </div>`
+      ).join('');
+
+      // Ingredients
+      const ingEl = document.getElementById('ingredientsList');
+      ingEl.innerHTML = data.ingredients.map(i =>
+        `<li class="ingredient-item">
+          <span class="ingredient-dot"></span>
+          <span class="ingredient-qty">${i.qty}</span>
+          <span class="ingredient-name">${i.name}</span>
+        </li>`
+      ).join('');
+
+      // Steps
+      const stepsEl = document.getElementById('stepsList');
+      stepsEl.innerHTML = data.steps.map((s, idx) =>
+        `<div class="step-item">
+          <div class="step-num">${idx + 1}</div>
+          <div class="step-text">${s}</div>
+        </div>`
+      ).join('');
+
+      // Reset recipe state
+      recipeOpen = false;
+      document.getElementById('recipePanel').classList.remove('open');
+      document.getElementById('cookBtn').classList.remove('expanded');
+      document.getElementById('cookChevron').textContent = 'expand_more';
+
+      // Open
+      document.getElementById('foodModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeFoodModal(e) {
+      if (e.target === document.getElementById('foodModal')) {
+        closeFoodModalDirect();
+      }
+    }
+
+    function closeFoodModalDirect() {
+      document.getElementById('foodModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function toggleRecipe() {
+      recipeOpen = !recipeOpen;
+      document.getElementById('recipePanel').classList.toggle('open', recipeOpen);
+      document.getElementById('cookBtn').classList.toggle('expanded', recipeOpen);
+      document.getElementById('cookChevron').textContent = recipeOpen ? 'expand_less' : 'expand_more';
+    }
+
+    // Attach click handlers to food cards
+    document.querySelectorAll('.food-card').forEach(card => {
+      const name = card.querySelector('.food-card-name')?.textContent.trim();
+      if (!name) return;
+
+      // Click on card image triggers modal
+      const imgWrap = card.querySelector('.food-card-img');
+      if (imgWrap) {
+        imgWrap.style.cursor = 'pointer';
+        imgWrap.addEventListener('click', () => openFoodModal(name));
+      }
+
+      // Recipe book button
+      const recipeBtn = card.querySelector('.fca-recipe');
+      if (recipeBtn) {
+        recipeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openFoodModal(name);
+        });
+      }
+    });
+
+    // Close modal on Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeFoodModalDirect();
+    });
+
+    /* ─── Booth / Kiosk Display Mode ────────────────────────────────────── */
+    (function () {
+      const SPEED = 0.38;   // gentle cinematic pace — easy on the eyes
+      const RESUME_DELAY = 5500;   // ms idle before resuming — enough to read a section
+      const BOTTOM_PAUSE = 3200;   // ms pause at bottom before looping back to top
+      const START_DELAY = 2000;   // ms before first scroll begins
+
+      let scrolling = true;
+      let resumeTimer = null;
+      let bottomPaused = false;
+      let rafId = null;
+      let lastTS = null;
+      let accum = 0;
+
+      // ── Kiosk UX hardening ───────────────────────────────────────────────
+      // Hide scrollbar globally
+      const scrollStyle = document.createElement('style');
+      scrollStyle.textContent = `
+        html { scrollbar-width: none; }
+        body::-webkit-scrollbar { display: none; }
+        ::selection { background: transparent; }
+      `;
+      document.head.appendChild(scrollStyle);
+
+      // Block right-click context menu
+      document.addEventListener('contextmenu', e => e.preventDefault());
+
+      // ── Status pill ─────────────────────────────────────────────────────
+      const pill = document.createElement('div');
+      pill.id = 'kiosk-pill';
+      Object.assign(pill.style, {
+        position: 'fixed',
+        bottom: '24px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: '500',
+        background: 'rgba(26,31,14,0.68)',
+        backdropFilter: 'blur(12px)',
+        color: '#fff',
+        padding: '8px 20px',
+        borderRadius: '50px',
+        fontSize: '.72rem',
+        fontWeight: '600',
+        letterSpacing: '.8px',
+        textTransform: 'uppercase',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        fontFamily: "'Inter',sans-serif",
+        transition: 'opacity .5s, background .4s',
+        pointerEvents: 'none',
+        whiteSpace: 'nowrap',
+      });
+
+      const pillDot = document.createElement('span');
+      Object.assign(pillDot.style, {
+        width: '7px',
+        height: '7px',
+        borderRadius: '50%',
+        background: '#A3B068',
+        display: 'inline-block',
+        flexShrink: '0',
+        boxShadow: '0 0 0 0 rgba(163,176,104,0.6)',
+        animation: 'pillPulse 2s infinite',
+      });
+
+      const pillText = document.createElement('span');
+      pillText.textContent = 'Touch to Explore';
+      pill.appendChild(pillDot);
+      pill.appendChild(pillText);
+      document.body.appendChild(pill);
+
+      // Pulse keyframes
+      const kf = document.createElement('style');
+      kf.textContent = `
+        @keyframes pillPulse {
+          0%   { box-shadow: 0 0 0 0   rgba(163,176,104,0.7); }
+          70%  { box-shadow: 0 0 0 7px rgba(163,176,104,0);   }
+          100% { box-shadow: 0 0 0 0   rgba(163,176,104,0);   }
+        }
+        @keyframes pillFadeOut {
+          to { opacity: 0; transform: translateX(-50%) translateY(6px); }
+        }
+      `;
+      document.head.appendChild(kf);
+
+      // Show pill briefly at start, fade it out after 4s
+      pill.style.opacity = '0';
+      setTimeout(() => {
+        pill.style.opacity = '1';
+        setTimeout(() => { pill.style.opacity = '0'; }, 4000);
+      }, START_DELAY - 200);
+
+      function showPaused() {
+        pillDot.style.background = '#E8A838';
+        pillDot.style.animation = 'none';
+        pillDot.style.boxShadow = 'none';
+        pillText.textContent = 'Resuming shortly…';
+        pill.style.background = 'rgba(107,122,58,0.75)';
+        pill.style.opacity = '1';
+      }
+
+      function showScrolling() {
+        pillDot.style.background = '#A3B068';
+        pillDot.style.animation = 'pillPulse 2s infinite';
+        pillText.textContent = 'Touch to Explore';
+        pill.style.background = 'rgba(26,31,14,0.68)';
+        // fade out after 3s
+        clearTimeout(pill._fadeTimer);
+        pill._fadeTimer = setTimeout(() => { pill.style.opacity = '0'; }, 3000);
+      }
+
+      // ── Pause / resume ───────────────────────────────────────────────────
+      function pause() {
+        if (!scrolling) return;
+        scrolling = false;
+        lastTS = null;
+        showPaused();
+        clearTimeout(resumeTimer);
+      }
+
+      function scheduleResume() {
+        clearTimeout(resumeTimer);
+        resumeTimer = setTimeout(() => {
+          if (document.getElementById('foodModal').classList.contains('open')) return;
+          scrolling = true;
+          lastTS = null;
+          showScrolling();
+          startRaf();
+        }, RESUME_DELAY);
+      }
+
+      function pauseAndSchedule() {
+        pause();
+        scheduleResume();
+      }
+
+      // ── Interaction listeners — mouse-primary (laptop booth) ────────────
+      // Mouse move = someone is at the screen, pause immediately
+      document.addEventListener('mousemove', pauseAndSchedule);
+      document.addEventListener('mousedown', pauseAndSchedule);
+      document.addEventListener('mouseup', scheduleResume);
+
+      // Scroll wheel / trackpad
+      document.addEventListener('wheel', pauseAndSchedule, { passive: true });
+
+      // Touch as fallback (in case someone taps the screen)
+      document.addEventListener('touchstart', pauseAndSchedule, { passive: true });
+      document.addEventListener('touchend', scheduleResume, { passive: true });
+
+      // Stop burning CPU when tab is backgrounded / laptop lid closed
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+          lastTS = null;
+        } else if (scrolling) {
+          startRaf();
+        }
+      });
+
+      // Modal open → keep paused, closed → schedule resume
+      const observer = new MutationObserver(() => {
+        if (document.getElementById('foodModal').classList.contains('open')) {
+          pause();
+          clearTimeout(resumeTimer);
+        } else {
+          scheduleResume();
+        }
+      });
+      observer.observe(document.getElementById('foodModal'), {
+        attributes: true, attributeFilter: ['class']
+      });
+
+      // ── rAF scroll loop ──────────────────────────────────────────────────
+      function tick(ts) {
+        rafId = requestAnimationFrame(tick);
+        if (!scrolling) return;
+
+        if (lastTS === null) { lastTS = ts; return; }
+        const dt = Math.min(ts - lastTS, 64);
+        lastTS = ts;
+        accum += (dt / 16.67) * SPEED;
+
+        const step = Math.floor(accum);
+        if (step < 1) return;
+        accum -= step;
+
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+
+        if (window.scrollY + step >= maxScroll) {
+          window.scrollTo({ top: maxScroll });
+          if (!bottomPaused) {
+            bottomPaused = true;
+            scrolling = false;
+            lastTS = null;
+
+            // Show "Looping…" state in pill
+            pillText.textContent = 'Looping…';
+            pillDot.style.background = '#A3B068';
+            pill.style.opacity = '1';
+
+            setTimeout(() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setTimeout(() => {
+                bottomPaused = false;
+                scrolling = true;
+                lastTS = null;
+                showScrolling();
+              }, 1000);
+            }, BOTTOM_PAUSE);
+          }
+        } else {
+          window.scrollBy(0, step);
+        }
+      }
+
+      function startRaf() {
+        if (rafId) cancelAnimationFrame(rafId);
+        lastTS = null;
+        rafId = requestAnimationFrame(tick);
+      }
+
+      setTimeout(startRaf, START_DELAY);
+    })();
+
   </script>
-</body>
+
+  </script>
 
 </html>
